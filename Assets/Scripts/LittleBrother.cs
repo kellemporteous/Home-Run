@@ -49,8 +49,13 @@ public class LittleBrother : MonoBehaviour {
 
     void Movement()
     {
+        //getting the distance bewteen the target and AI
+        Vector3 delta = transform.position-target.transform.position;
+        //set the distance to 1 unit
+        delta.Normalize();
+
         //The AI will move towards the target
-        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, target.transform.position+delta*offset, speed * Time.deltaTime);
     }
 
     void AILogic()
