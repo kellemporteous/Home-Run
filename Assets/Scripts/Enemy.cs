@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour {
     public bool top;
     public GameObject jumpcube;
     public float jump_Y;
+    public AudioSource headjump;
 
     // Use this for initialization
     void Start ()
@@ -26,6 +27,7 @@ public class Enemy : MonoBehaviour {
         {
             Debug.Log("true");
             health = health - 1;
+            headjump.Play();
             top = false;
            
         }
@@ -38,7 +40,7 @@ public class Enemy : MonoBehaviour {
     {
         if (other.gameObject.tag == ("Player") && other.gameObject.transform.position.y >= transform.position.y + 1)
         {
-            if (jumpcube.transform.position.y <= transform.position.y - jump_Y)
+            if (other.gameObject.GetComponent<playerInput>().goingDown)
             {
                 top = true;
             }
