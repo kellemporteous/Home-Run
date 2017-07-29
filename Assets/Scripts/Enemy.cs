@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
     public int health;
-    
-	// Use this for initialization
-	void Start ()
+    public bool top;
+    public GameObject jumpcube;
+    public float jump_Y;
+
+    // Use this for initialization
+    void Start ()
     {
         health = 3;
 	}
@@ -19,5 +22,31 @@ public class Enemy : MonoBehaviour {
             Destroy(gameObject);
 
         }
+        if (top == true)
+        {
+            Debug.Log("true");
+            health = health - 1;
+            top = false;
+           
+        }
+       
 	}
+
+
+    public void OnTriggerEnter2D(Collider2D other)
+
+    {
+        if (other.gameObject.tag == ("Player") && other.gameObject.transform.position.y >= transform.position.y + 1)
+        {
+            if (jumpcube.transform.position.y <= transform.position.y - jump_Y)
+            {
+                top = true;
+            }
+            if (jumpcube.transform.position.y >= transform.position.y + jump_Y)
+            {
+                top = true;
+            }
+        }
+    }
+
 }
