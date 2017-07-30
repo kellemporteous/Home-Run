@@ -16,7 +16,7 @@ public class sprieOrderSorter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update ()
-    {
+    {   if (transform.position.y <=-1)
         GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * 100f) * -1;
     }
 }
