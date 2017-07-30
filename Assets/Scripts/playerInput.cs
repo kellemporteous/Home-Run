@@ -34,12 +34,16 @@ public class playerInput : MonoBehaviour {
     public float runtimerintial;
     public float walkspeed;
     public float runspeed;
+    public Animator ani;
+    public SpriteRenderer thisspriterenderer;
 
 
 
     // Use this for initialization
     void Start()
     {
+        thisspriterenderer = gameObject.GetComponent<SpriteRenderer>();
+        ani = gameObject.GetComponent<Animator>();
         playerRB = this.gameObject.GetComponent<Rigidbody2D>();
         notrunning = true;
         startjumpspeed = jumpSpeed;
@@ -60,18 +64,23 @@ public class playerInput : MonoBehaviour {
         if (notrunning)
         {
             speed = walkspeed;
+            ani.SetBool("isrunning", false);
         }
         if (!notrunning)
         {
+            ani.SetBool("isrunning", true);
             speed = runspeed;
         }
 
-        if ((Input.GetAxis("horizontalP1") == 0f) && runtimer)
+
+        if ((Input.GetAxis("horizontalP1") == 0f))
             {
+            ani.SetBool("iswalking", false);
+            
             if (runtimer && notrunning)
                 notrunning = false;
-            
-            }
+           
+        }
 
         if ((Input.GetAxis("horizontalP1") == 0f && !notrunning))
         {
@@ -86,15 +95,19 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetAxis("horizontalP1") == -1f || Input.GetAxis("horizontalP2") == -1f) && transform.position.x <= right.position.x )
         {
+            thisspriterenderer.flipX = false;
             if (!runtimer && notrunning)
             {
                 runtimer = true;
                 timertime = runtimerintial;
+                ani.SetBool("iswalking", true);
             }
 
             if (!notrunning)
 
             {
+
+              
                 timertime = runtimerintial;
             }
 
@@ -109,7 +122,13 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetAxis("horizontalP1") == 1f || Input.GetAxis("horizontalP2") ==1f) && transform.position.x >= left.position.x)
         {
-            
+            thisspriterenderer.flipX = true;
+            if (!runtimer && notrunning)
+            {
+                runtimer = true;
+                timertime = runtimerintial;
+                ani.SetBool("iswalking", true);
+            }
             if (p1)
                 playerRB.transform.position =  new Vector2(playerRB.transform.position.x - (speed - 1) / 100 , player.transform.position.y );
             if (!p1)
@@ -119,6 +138,14 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetAxis ("verticalP1") == -1f || Input.GetAxis("verticalP2") == -1f) &&  player.transform.position.y <= up.position.y)
         {
+            
+            if (!runtimer && notrunning)
+            {
+                runtimer = true;
+                timertime = runtimerintial;
+                ani.SetBool("iswalking", true);
+            }
+
             if (p1)
                 playerRB.transform.position = new Vector2(playerRB.transform.position.x, player.transform.position.y + speed / 200);
             if (!p1)
@@ -128,6 +155,12 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetAxis("verticalP1") == 1f || Input.GetAxis("verticalP2") ==1f) && player.transform.position.y >= down.position.y)
         {
+            if (!runtimer && notrunning)
+            {
+                runtimer = true;
+                timertime = runtimerintial;
+                ani.SetBool("iswalking", true);
+            }
             if (p1)
                 playerRB.transform.position = new Vector2(playerRB.transform.position.x, player.transform.position.y - speed / 200);
             if(!p1)
