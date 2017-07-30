@@ -29,7 +29,11 @@ public class playerInput : MonoBehaviour {
     public string playerstring;
     public GameObject player2;
     private GameObject player;
-
+    public bool notrunning;
+    public float timertime;
+    public float runtimerintial;
+    public float walkspeed;
+    public float runspeed;
 
 
 
@@ -37,22 +41,64 @@ public class playerInput : MonoBehaviour {
     void Start()
     {
         playerRB = this.gameObject.GetComponent<Rigidbody2D>();
-        
+        notrunning = true;
         startjumpspeed = jumpSpeed;
         player = GameObject.FindGameObjectWithTag("Player");
+        speed = walkspeed;
     }
-        
+
 
 
     // Update is called once per frame
     void Update()
-        
+
     {
-       
-        
-        
+        if (runtimer)
+        {
+            timertime -= Time.deltaTime * 10;
+        }
+        if (notrunning)
+        {
+            speed = walkspeed;
+        }
+        if (!notrunning)
+        {
+            speed = runspeed;
+        }
+
+        if ((Input.GetAxis("horizontalP1") == 0f) && runtimer)
+            {
+            if (runtimer && notrunning)
+                notrunning = false;
+            
+            }
+
+        if ((Input.GetAxis("horizontalP1") == 0f && !notrunning))
+        {
+            if (timertime <= 1)
+            {
+                runtimer = false;
+                timertime = 0;
+                notrunning = true;
+                
+            }
+        }
+
         if ((Input.GetAxis("horizontalP1") == -1f || Input.GetAxis("horizontalP2") == -1f) && transform.position.x <= right.position.x )
         {
+            if (!runtimer && notrunning)
+            {
+                runtimer = true;
+                timertime = runtimerintial;
+            }
+
+            if (!notrunning)
+
+            {
+                timertime = runtimerintial;
+            }
+
+
             if (p1)
             playerRB.transform.position = new Vector2(playerRB.transform.position.x + speed / 100, player.transform.position.y);
             if (!p1)
