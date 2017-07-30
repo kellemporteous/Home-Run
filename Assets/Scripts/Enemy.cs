@@ -23,14 +23,7 @@ public class Enemy : MonoBehaviour {
             Destroy(gameObject);
 
         }
-        if (top == true)
-        {
-            Debug.Log("true");
-            health = health - 1;
-            headjump.Play();
-            top = false;
-           
-        }
+       
        
 	}
 
@@ -42,12 +35,14 @@ public class Enemy : MonoBehaviour {
         {
             if (other.gameObject.GetComponent<playerInput>().goingDown)
             {
-                top = true;
+                
+                if (jumpcube.transform.position.y >= transform.position.y + jump_Y)
+                {
+                    health = health - 1;
+                    
+                }
             }
-            if (jumpcube.transform.position.y >= transform.position.y + jump_Y)
-            {
-                top = true;
-            }
+           
         }
     }
 
