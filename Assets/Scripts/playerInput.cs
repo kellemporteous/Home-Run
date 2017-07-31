@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class playerInput : MonoBehaviour {
     public float speed;
@@ -13,10 +14,11 @@ public class playerInput : MonoBehaviour {
     public float jumpSpeed;
     public float startjumpspeed;
     public Rigidbody2D playerRB;
-   // public float amountToMove;    // 
-   
-   
-   
+    // public float amountToMove;    // 
+
+    public Text countText;
+    public int count;
+
     public bool goingDown;      //wink wink
     public float jumpheight;   //height to jump
     public AudioSource jump;
@@ -49,6 +51,8 @@ public class playerInput : MonoBehaviour {
         startjumpspeed = jumpSpeed;
         player = GameObject.FindGameObjectWithTag("Player");
         speed = walkspeed;
+
+        count = 0;
     }
 
 
@@ -57,6 +61,8 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
+
+
         if (runtimer)
         {
             timertime -= Time.deltaTime * 10;
@@ -175,12 +181,15 @@ public class playerInput : MonoBehaviour {
         }
 
 
-       
-
-       
+      
        
 
 
+    }
+    //Counts when player collects ballons, but doesn't exceed the limit set
+    void SetCountText ()
+    {
+        countText.text = "" + count.ToString();
     }
 
   public void  OnTriggerEnter2D(Collider2D other)
@@ -194,7 +203,16 @@ public class playerInput : MonoBehaviour {
     }
     void FixedUpdate()
         {
-         if ((Input.GetButtonDown ("A_buttonP1") || Input.GetButtonDown("A_buttonP2")) && jumping == false && !goingDown)
+
+        //testing if balloon count goes up after key is pressed
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("R is being pressed");
+            SetCountText();
+        }
+
+
+        if ((Input.GetButtonDown ("A_buttonP1") || Input.GetButtonDown("A_buttonP2")) && jumping == false && !goingDown)
         {
             jumpPos.transform.position = new Vector2(transform.position.x, transform.position.y);
             // jump.Play();
