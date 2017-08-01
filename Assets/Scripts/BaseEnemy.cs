@@ -22,6 +22,7 @@ public class BaseEnemy : MonoBehaviour {
     public float tChange;
     public float speed;
     public int damage;
+    public int health;
     public int numWaterBalloons;
     public float visionDistance;
     public float hitDistance;
@@ -30,6 +31,8 @@ public class BaseEnemy : MonoBehaviour {
     public float coolDown;
     public float coolDownTimer;
 
+
+    public float idleCounter;
     //bools that change AI logic
     public bool isAttacking;
     public bool isSpecialActive;
@@ -39,12 +42,15 @@ public class BaseEnemy : MonoBehaviour {
     protected Vector2 currentPosition;
 
     //Declaring the playerInfo
-    PlayerHealth playerInfo;
+    protected PlayerHealth playerInfo;
+
+    public Animator animator;
 
     //Public enum that holds the different states
     public enum EnemyState
     {
         Idle,
+        Walk,
         Attack,
         Special
     }
@@ -53,7 +59,7 @@ public class BaseEnemy : MonoBehaviour {
     public EnemyState enemyState;
 
 	// Use this for initialization
-	void Start ()
+	public virtual void Start ()
     {
         //setting the variables to game objects
         enemy = GameObject.FindGameObjectWithTag("Enemy");
@@ -61,6 +67,7 @@ public class BaseEnemy : MonoBehaviour {
 
         //setting playerInfo to be able to call variables and function for the PlayerHealth script
         playerInfo = GetComponent<PlayerHealth>();
+        animator = GetComponent<Animator>();
 
         //Set enemy state to idle on start
         enemyState = EnemyState.Idle;
@@ -89,14 +96,28 @@ public class BaseEnemy : MonoBehaviour {
 
 	}
 
-    // Function will be called only when enemy state is set to idle
     void Idle()
+    {
+        if (idleCounter > 0)
+        {
+            idleCounter -= Time.deltaTime;
+        }
+
+        if (idleCounter <= 0)
+        {
+            enemyState = EnemyState.Walk;
+        }
+    }
+
+    // Function will be called only when enemy state is set to walk
+
+    void Walk()
     {
         //checking if tChnage has been reached
         if (Time.time >= tChange)
         {
             //Picking a random X and Y position bewteen the radius
-            positionX = Random.Range(-radiusX,radiusX);
+            positionX = Random.Range(-radiusX, radiusX);
             positionY = Random.Range(-radiusY, radiusY);
 
             //reassigning a new value to tChange
@@ -122,8 +143,12 @@ public class BaseEnemy : MonoBehaviour {
             positionY = Mathf.Clamp(positionY, -radiusY, radiusY);
         }
 
-    }
+        if (currentPosition == newPosition)
+        {
+            enemyState = EnemyState.Idle;
+        }
 
+    }
     //Function will only be called when eney state is set to attack
     void Attack()
     {
@@ -147,7 +172,7 @@ public class BaseEnemy : MonoBehaviour {
             if (playerDiff <= hitDistance)
             {
                 //call this function
-                Hit();
+                Slap();
                 //reset cool down
                 coolDownTimer = coolDown;
                 //set is attacking to false
@@ -181,11 +206,15 @@ public class BaseEnemy : MonoBehaviour {
     }
 
     //Function that controls when AI tries to hit the player, use will chnage depending on the child in heriting
-    public virtual void Hit()
+    public void Slap()
     {
-
+        animator.SetTrigger("EnemySlap");
     }
 
+    public void IsHit()
+    {
+        animator.SetTrigger("EnemHit");
+    }
     //Function controls the amount of AI with vision distance of each other
     void ScanForFriends()
     {
@@ -286,6 +315,9 @@ public class BaseEnemy : MonoBehaviour {
             case EnemyState.Idle:
                 Idle();
                 break;
+            case EnemyState.Walk:
+                Walk();
+                break;
             case EnemyState.Attack:
                 Attack();
                 break;
@@ -296,7 +328,7 @@ public class BaseEnemy : MonoBehaviour {
     }
 
     //Function that controls collisions
-    void OnCollisionEnter2D(Collision2D collision)
+    public virtual void OnCollisionEnter2D(Collision2D collision)
     {
         //checking if isAttacking is true
         if (isAttacking == true)
