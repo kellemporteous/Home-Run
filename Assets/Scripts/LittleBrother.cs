@@ -55,7 +55,7 @@ public class LittleBrother : MonoBehaviour {
         delta.Normalize();
 
         //The AI will move towards the target
-        transform.position = Vector2.MoveTowards(transform.position, target.transform.position+delta*offset, speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, target.transform.position + delta*offset, speed * Time.deltaTime);
     }
 
     void AILogic()
@@ -69,7 +69,7 @@ public class LittleBrother : MonoBehaviour {
         {
             behaviourState = BehaviourState.Scared;
         }
-        else
+        else if(enemy == null)
         {
             behaviourState = BehaviourState.Safe;
         }

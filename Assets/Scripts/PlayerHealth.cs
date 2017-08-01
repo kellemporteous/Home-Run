@@ -8,6 +8,7 @@ public class PlayerHealth : MonoBehaviour {
     public List<GameObject> healthImages;
     public int maxHealth;
     public int currentHealth;
+    public int damage;
 
 
 	// Use this for initialization
