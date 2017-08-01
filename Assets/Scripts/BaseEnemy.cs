@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BaseEnemy : MonoBehaviour {
@@ -30,8 +31,8 @@ public class BaseEnemy : MonoBehaviour {
     public float coolDownTimer;
 
     //bools that change AI logic
-    protected bool isAttacking;
-    protected bool isSpecialActive;
+    public bool isAttacking;
+    public bool isSpecialActive;
 
     //Vector2 positions declared
     protected Vector2 newPosition;
@@ -82,6 +83,7 @@ public class BaseEnemy : MonoBehaviour {
         }
 
         //functions that need to be called every update
+        ScanForFriends();
         EnemyBehaviour();
         EnemyLogic();
 
@@ -182,6 +184,40 @@ public class BaseEnemy : MonoBehaviour {
     public virtual void Hit()
     {
 
+    }
+
+    //Function controls the amount of AI with vision distance of each other
+    void ScanForFriends()
+    {
+        // setting count to 0 everyframe so the same enemy is not counted twice
+        int count = 0;
+        //Creating a list to sort the amount of enemies seen
+        List<GameObject> enemies = GameObject.FindGameObjectsWithTag("Enemy").ToList();
+
+        //foreach stated to see how many enemies are currently in the list
+        foreach (GameObject enemy in enemies)
+        {
+            //checking if an enemy is within vision distance
+            if ((enemy.transform.position - transform.position).magnitude <= visionDistance)
+            {
+                //add 1 increment to count equal to the amount of game objects in the list
+                count++;
+            } 
+        }
+
+        // checking if count is higher than 3 and if AI is in correct state
+        if (count >= 3 && enemyState == EnemyState.Attack)
+        {
+            //if true change states
+            enemyState = EnemyState.Special;
+        }
+
+        // checking if count is still higher than 3 as well as current state
+        if (count <= 3 && enemyState == EnemyState.Special)
+        {
+            //if true change states
+            enemyState = EnemyState.Attack;
+        }
     }
 
     //Function will control the direction the AI is facing
