@@ -38,8 +38,7 @@ public class playerInput : MonoBehaviour {
     public float runspeed;
     public Animator ani;
     public SpriteRenderer thisspriterenderer;
-
-
+   
 
     // Use this for initialization
     void Start()
@@ -61,7 +60,9 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
-
+              
+             
+                  
 
         if (runtimer)
         {
@@ -99,7 +100,7 @@ public class playerInput : MonoBehaviour {
             }
         }
 
-        if ((Input.GetAxis("horizontalP1") == -1f || Input.GetAxis("horizontalP2") == -1f) && transform.position.x <= right.position.x )
+        if ((Input.GetAxis("horizontalP1") == -1f || Input.GetAxis("horizontalP2") == -1f) && transform.position.x <= right.position.x  )
         {
             thisspriterenderer.flipX = false;
             if (!runtimer && notrunning)
@@ -176,8 +177,11 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetButtonDown("B_buttonP1") || Input.GetButtonDown("B_buttonP2") && WBCOUNT != 0))
         {
-            Instantiate(balloonPrefab,gameObject.transform.position, Quaternion.identity);
+            ani.SetTrigger("throw");
+            Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
             WBCOUNT -= 1;
+            
+
         }
 
 
