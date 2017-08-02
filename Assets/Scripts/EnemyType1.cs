@@ -11,7 +11,7 @@ public class EnemyType1 : BaseEnemy {
         transform.position = Vector2.MoveTowards(currentPosition, newPosition, speed * 2 * Time.deltaTime);
         float playerDiff = (player.transform.position - transform.position).magnitude;
 
-        if (playerDiff <= hitDistance)
+        if (playerDiff <= hitDistance && isAttacking)
         {
             Slap();
         }

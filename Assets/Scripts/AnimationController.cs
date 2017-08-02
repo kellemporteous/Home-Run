@@ -23,17 +23,20 @@ public class AnimationController : MonoBehaviour {
 
     void EnemyAnimation()
     {
-        switch (enemy.enemyState)
+        if (!enemy.isSlapActive)
         {
-            case BaseEnemy.EnemyState.Idle:
-                animator.SetTrigger("EnemyIdle");
-                break;
-            case BaseEnemy.EnemyState.Walk:
-                animator.SetTrigger("EnemyWalk");
-                break;
-            case BaseEnemy.EnemyState.Attack:
-                animator.SetTrigger("EnemyRun");
-                break;
+            switch (enemy.enemyState)
+            {
+                case BaseEnemy.EnemyState.Idle:
+                    animator.SetTrigger("EnemyIdle");
+                    break;
+                case BaseEnemy.EnemyState.Walk:
+                    animator.SetTrigger("EnemyWalk");
+                    break;
+                case BaseEnemy.EnemyState.Attack:
+                    animator.SetTrigger("EnemyRun");
+                    break;
+            }
         }
     }
 }

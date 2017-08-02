@@ -36,6 +36,7 @@ public class BaseEnemy : MonoBehaviour {
     //bools that change AI logic
     public bool isAttacking;
     public bool isSpecialActive;
+    public bool isSlapActive;
 
     //Vector2 positions declared
     protected Vector2 newPosition;
@@ -57,9 +58,10 @@ public class BaseEnemy : MonoBehaviour {
 
     //Delcaring the EnemyState. Needed/easier to switch states
     public EnemyState enemyState;
+    public EnemyState enemyLastState;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         //setting the variables to game objects
         enemy = GameObject.FindGameObjectWithTag("Enemy");
@@ -75,7 +77,9 @@ public class BaseEnemy : MonoBehaviour {
         //setting booleans when the game starts
         isAttacking = false;
         isSpecialActive = false;
-	}
+        isSlapActive = false;
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -93,6 +97,7 @@ public class BaseEnemy : MonoBehaviour {
         ScanForFriends();
         EnemyBehaviour();
         EnemyLogic();
+        enemyLastState = enemyState;
 
 	}
 
@@ -168,7 +173,7 @@ public class BaseEnemy : MonoBehaviour {
 
 
             //checking if Ai is within hit distance
-            if (playerDiff <= hitDistance)
+            if (playerDiff <= hitDistance && !isSlapActive)
             {
                 //call this function
                 Slap();
@@ -181,11 +186,16 @@ public class BaseEnemy : MonoBehaviour {
         }
 
         //checking to see if isAttacking is true
-        if (isAttacking == false)
+        else if (isAttacking == false)
         {
-            //Move away from the player
-            transform.position = Vector2.MoveTowards(currentPosition, -newPosition, speed/4 * Time.deltaTime);
-            //Calling cool down function only when is attacking is false
+
+            if(!isSlapActive)
+            {
+                //Move away from the player
+                transform.position = Vector2.MoveTowards(currentPosition, -newPosition, speed / 4 * Time.deltaTime);
+                //Calling cool down function only when is attacking is false
+            }
+
             CoolDown();
         }
 
@@ -208,13 +218,20 @@ public class BaseEnemy : MonoBehaviour {
     //Function that controls when AI tries to hit the player, use will chnage depending on the child in heriting
     public void Slap()
     {
-        animator.SetTrigger("EnemySlap");
-        //set is attacking to false
+        Debug.Log("Slap");
+        isSlapActive = true;
         isAttacking = false;
         //reset cool down
         coolDownTimer = coolDown;
+        animator.SetTrigger("EnemySlap");
     }
 
+    public void EndOfSlap()
+    {
+        //set is attacking to false
+        isSlapActive = false;
+
+    }
     public void IsHit()
     {
         animator.SetTrigger("EnemHit");
@@ -239,17 +256,19 @@ public class BaseEnemy : MonoBehaviour {
         }
 
         // checking if count is higher than 3 and if AI is in correct state
-        if (count >= 3 && enemyState == EnemyState.Attack)
+        if (count >= 2 && enemyState == EnemyState.Attack)
         {
             //if true change states
             enemyState = EnemyState.Special;
+            isSpecialActive = true;
         }
 
         // checking if count is still higher than 3 as well as current state
-        if (count <= 3 && enemyState == EnemyState.Special)
+        else if (count < 2 && enemyState == EnemyState.Special)
         {
             //if true change states
             enemyState = EnemyState.Attack;
+            isSpecialActive = false;
         }
     }
 
