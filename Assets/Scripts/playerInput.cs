@@ -38,6 +38,8 @@ public class playerInput : MonoBehaviour {
     public float runspeed;
     public Animator ani;
     public SpriteRenderer thisspriterenderer;
+    public int throwtimer;
+    public bool throwbool;
    
 
     // Use this for initialization
@@ -69,8 +71,8 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
-              
-             
+
+        throwtimer -= 1;    
                   
 
         if (runtimer)
@@ -253,19 +255,20 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetButtonDown("B_buttonP1")  && WBCOUNT != 0 && p1))
         {
-           if (p1)
+           if (p1 && throwtimer <= 0)
             ani.SetTrigger("throw");
             Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
             WBCOUNT -= 1;
-
+            throwtimer = 10;
         }
         if (Input.GetButtonDown("B_buttonP2") && WBCOUNT != 0 && !p1)
         {
-            if (!p1)
+            if (!p1 && throwtimer <= 0)
             {
                 ani.SetTrigger("throw");
                 Instantiate(balloonPrefab, transform.position, Quaternion.identity);
                 WBCOUNT -= 1;
+                throwtimer = 10;
             }
         }
 

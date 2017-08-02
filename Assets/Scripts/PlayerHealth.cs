@@ -25,12 +25,8 @@ public class PlayerHealth : MonoBehaviour {
 	void Update () {
 		if (currentHealth <= 0)
         {
-			Analytics.CustomEvent("gameOver", new Dictionary<string, object>
-				{
-					{ "playTime", Time.time-startTime }
-					//{ "coins", totalCoins },
-					//{ "activeWeapon", weaponID }
-				});
+			
+				
             spawner.GetComponent<playerdist>().spawning = true;
             currentHealth = maxHealth;
 			startTime = Time.time;
