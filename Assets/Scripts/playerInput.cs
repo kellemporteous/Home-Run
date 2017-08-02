@@ -50,7 +50,16 @@ public class playerInput : MonoBehaviour {
         startjumpspeed = jumpSpeed;
         player = GameObject.FindGameObjectWithTag("Player");
         speed = walkspeed;
+        if (p1)
+        {
+            jumpPos = GameObject.FindGameObjectWithTag("jumposP1");
+                 
+        }
+        if (!p1)
+        {
+            jumpPos = GameObject.FindGameObjectWithTag("jumposP2");
 
+        }
         count = 0;
     }
 
@@ -242,18 +251,26 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetButtonDown("B_buttonP1") || Input.GetButtonDown("B_buttonP2") && WBCOUNT != 0))
+        if ((Input.GetButtonDown("B_buttonP1")  && WBCOUNT != 0 && p1))
         {
+           if (p1)
             ani.SetTrigger("throw");
             Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
             WBCOUNT -= 1;
-            
 
+        }
+        if (Input.GetButtonDown("B_buttonP2") && WBCOUNT != 0 && !p1)
+        {
+            if (!p1)
+            {
+                ani.SetTrigger("throw");
+                Instantiate(balloonPrefab, transform.position, Quaternion.identity);
+                WBCOUNT -= 1;
+            }
         }
 
 
-      
-       
+
 
 
     }
@@ -283,35 +300,56 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetButtonDown ("A_buttonP1") || Input.GetButtonDown("A_buttonP2")) && jumping == false && !goingDown)
+        if ((Input.GetButtonDown("A_buttonP1") && p1 && jumping == false && !goingDown))
         {
             jumpPos.transform.position = new Vector2(transform.position.x, transform.position.y);
             // jump.Play();
-          
+
             //jumpPos.transform.position = new Vector2( transform.position.x,playerRB.transform.position.y);
             gameObject.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, jumpSpeed - Time.deltaTime));
             jumping = true;
-            
+        }
+        if ((Input.GetButtonDown("A_buttonP2") && !p1 && jumping == false && !goingDown))
+        {
+            jumpPos.transform.position = new Vector2(transform.position.x, transform.position.y);
+            // jump.Play();
+
+            //jumpPos.transform.position = new Vector2( transform.position.x,playerRB.transform.position.y);
+            gameObject.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, jumpSpeed - Time.deltaTime));
+            jumping = true;
+
 
         }
-        if (jumping  && !goingDown)
+
+        if (jumping  && !goingDown && p1)
         {
-            if (player.transform.position.y > jumpPos.transform.position.y + jumpheight / 100)
+            if (transform.position.y > jumpPos.transform.position.y + jumpheight / 100)
             {
                 gameObject.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, -jumpSpeed ));
                 goingDown = true;
                
             }
 
-            
+
+        }
+        if (jumping && !goingDown && !p1)
+        {
+            if (gameObject.transform.position.y > jumpPos.transform.position.y + jumpheight / 100)
+            {
+                gameObject.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, -jumpSpeed));
+                goingDown = true;
+
+            }
+
+
         }
 
         if (goingDown &&  transform.position.y <= jumpPos.transform.position.y)
 
         {
             
-            playerRB.GetComponent<Rigidbody2D> ().transform.position = new Vector2(transform.position.x, jumpPos.transform.position.y);
-            playerRB.velocity = new Vector2(playerRB.velocity.x, 0);
+           gameObject.GetComponent<Rigidbody2D> ().transform.position = new Vector2(transform.position.x, jumpPos.transform.position.y);
+           gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(gameObject.GetComponent<Rigidbody2D>().velocity.x, 0);
             
 
             jumping = false;
