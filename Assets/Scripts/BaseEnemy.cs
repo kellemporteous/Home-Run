@@ -59,7 +59,7 @@ public class BaseEnemy : MonoBehaviour {
     public EnemyState enemyState;
 
 	// Use this for initialization
-	public virtual void Start ()
+	void Start ()
     {
         //setting the variables to game objects
         enemy = GameObject.FindGameObjectWithTag("Enemy");
@@ -73,7 +73,7 @@ public class BaseEnemy : MonoBehaviour {
         enemyState = EnemyState.Idle;
 
         //setting booleans when the game starts
-        isAttacking = true;
+        isAttacking = false;
         isSpecialActive = false;
 	}
 	
@@ -165,19 +165,19 @@ public class BaseEnemy : MonoBehaviour {
         //checking to see if isAttacking is true
         if (isAttacking == true)
         {
-            //move towards player
-            transform.position = Vector2.MoveTowards(currentPosition, newPosition, speed * Time.deltaTime);
+
 
             //checking if Ai is within hit distance
             if (playerDiff <= hitDistance)
             {
                 //call this function
                 Slap();
-                //reset cool down
-                coolDownTimer = coolDown;
-                //set is attacking to false
-                isAttacking = false;
+
+
             }
+
+            //move towards player
+            transform.position = Vector2.MoveTowards(currentPosition, newPosition, speed * Time.deltaTime);
         }
 
         //checking to see if isAttacking is true
@@ -209,6 +209,10 @@ public class BaseEnemy : MonoBehaviour {
     public void Slap()
     {
         animator.SetTrigger("EnemySlap");
+        //set is attacking to false
+        isAttacking = false;
+        //reset cool down
+        coolDownTimer = coolDown;
     }
 
     public void IsHit()
