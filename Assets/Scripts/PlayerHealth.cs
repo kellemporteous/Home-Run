@@ -24,8 +24,7 @@ public class PlayerHealth : MonoBehaviour {
 	void Update () {
 		if (currentHealth <= 0)
         {
-			
-				
+
             spawner.GetComponent<playerdist>().spawning = true;
             currentHealth = maxHealth;
 			startTime = Time.time;
