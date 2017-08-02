@@ -100,8 +100,12 @@ public class playerInput : MonoBehaviour {
             }
         }
 
-        if ((Input.GetAxis("horizontalP1") == -1f || Input.GetAxis("horizontalP2") == -1f) && transform.position.x <= right.position.x  )
+        if ((Input.GetAxis("horizontalP1") == -1f && p1 && transform.position.x <= right.position.x))
         {
+            if (p1)
+            {
+                transform.position = new Vector2(transform.position.x + speed / 100, transform.position.y);
+            }
             thisspriterenderer.flipX = false;
             if (!runtimer && notrunning)
             {
@@ -114,20 +118,31 @@ public class playerInput : MonoBehaviour {
 
             {
 
-              
+
                 timertime = runtimerintial;
             }
-
-
-            if (p1)
-            playerRB.transform.position = new Vector2(playerRB.transform.position.x + speed / 100, player.transform.position.y);
+        }
+        if ((Input.GetAxis("horizontalP2") == -1f && !p1))
+        {
             if (!p1)
             {
-            player2.transform.position = new Vector2(player2.transform.position.x + speed / 100, player.transform.position.y); ;
+                player2.transform.position = new Vector2(player2.transform.position.x + speed / 100,transform.position.y);
             }
+            thisspriterenderer.flipX = false;
+            if (!runtimer && notrunning)
+            {
+                runtimer = true;
+                timertime = runtimerintial;
+                ani.SetBool("iswalking", true);
+            }
+
+
+
+           
+           
         }
 
-        if ((Input.GetAxis("horizontalP1") == 1f || Input.GetAxis("horizontalP2") ==1f) && transform.position.x >= left.position.x)
+        if ((Input.GetAxis("horizontalP1") == 1f && p1 && transform.position.x >= left.position.x))
         {
             thisspriterenderer.flipX = true;
             if (!runtimer && notrunning)
@@ -136,16 +151,16 @@ public class playerInput : MonoBehaviour {
                 timertime = runtimerintial;
                 ani.SetBool("iswalking", true);
             }
+
             if (p1)
-                playerRB.transform.position =  new Vector2(playerRB.transform.position.x - (speed - 1) / 100 , player.transform.position.y );
+                transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
             if (!p1)
-            
-                player2.transform.position = new Vector2(player2.transform.position.x - (speed - 1) / 100, player.transform.position.y);
+                transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
         }
 
-        if ((Input.GetAxis ("verticalP1") == -1f || Input.GetAxis("verticalP2") == -1f) &&  player.transform.position.y <= up.position.y)
+        if ((Input.GetAxis("horizontalP2") == 1f && !p1 && transform.position.x >= left.position.x))
         {
-            
+            thisspriterenderer.flipX = true;
             if (!runtimer && notrunning)
             {
                 runtimer = true;
@@ -153,14 +168,50 @@ public class playerInput : MonoBehaviour {
                 ani.SetBool("iswalking", true);
             }
 
-            if (p1)
-                playerRB.transform.position = new Vector2(playerRB.transform.position.x, player.transform.position.y + speed / 200);
+           
             if (!p1)
 
-                player2.transform.position = new Vector2(player2.transform.position.x, player.transform.position.y + speed / 200);
+                transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
         }
 
-        if ((Input.GetAxis("verticalP1") == 1f || Input.GetAxis("verticalP2") ==1f) && player.transform.position.y >= down.position.y)
+        if ((Input.GetAxis("verticalP1") == -1f  && p1 && transform.position.y <= up.position.y))
+        {
+
+            if (!runtimer && notrunning)
+            {
+               // runtimer = true;
+                timertime = runtimerintial;
+                ani.SetBool("iswalking", true);
+            }
+
+
+            if (p1)
+                transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
+            if (!p1)
+
+                transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
+        }
+
+        if ((Input.GetAxis("verticalP2") == -1f && !p1 && transform.position.y <= up.position.y))
+        {
+
+            if (!runtimer && notrunning)
+            {
+                runtimer = true;
+                timertime = runtimerintial;
+                ani.SetBool("iswalking", true);
+            }
+
+
+            if (p1)
+                transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
+            if (!p1)
+
+                transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
+        }
+
+
+        if ((Input.GetAxis("verticalP1") == 1f && p1 && transform.position.y >= down.position.y))
         {
             if (!runtimer && notrunning)
             {
@@ -169,11 +220,27 @@ public class playerInput : MonoBehaviour {
                 ani.SetBool("iswalking", true);
             }
             if (p1)
-                playerRB.transform.position = new Vector2(playerRB.transform.position.x, player.transform.position.y - speed / 200);
+                transform.position = new Vector2 (transform.position.x, transform.position.y - speed / 200);
             if(!p1)
 
-                player2.transform.position = new Vector2(player2.transform.position.x, player.transform.position.y - speed / 200);
+               transform.position = new Vector2(transform.position.x, transform.position.y - speed / 200);
         }
+        if ((Input.GetAxis("verticalP2") == 1f && !p1 && transform.position.y >= down.position.y))
+        {
+         
+            if (!runtimer && notrunning)
+            {
+                runtimer = true;
+                timertime = runtimerintial;
+                ani.SetBool("iswalking", true);
+            }
+            
+               
+            if (!p1)
+
+                    transform.position = new Vector2(transform.position.x, transform.position.y - speed / 200);
+        }
+
 
         if ((Input.GetButtonDown("B_buttonP1") || Input.GetButtonDown("B_buttonP2") && WBCOUNT != 0))
         {
