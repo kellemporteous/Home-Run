@@ -300,7 +300,7 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetButtonDown("A_buttonP1") && p1 && jumping == false && !goingDown))
+        if ((Input.GetButtonDown("A_buttonP1")&& Input.GetAxis("verticalP1") == -1f && p1 && jumping == false && !goingDown))
         {
             jumpPos.transform.position = new Vector2(transform.position.x, transform.position.y);
             // jump.Play();
@@ -309,7 +309,7 @@ public class playerInput : MonoBehaviour {
             gameObject.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, jumpSpeed - Time.deltaTime));
             jumping = true;
         }
-        if ((Input.GetButtonDown("A_buttonP2") && !p1 && jumping == false && !goingDown))
+        if ((Input.GetButtonDown("A_buttonP2") && Input.GetAxis("verticalP2") == -1f && !p1 && jumping == false && !goingDown))
         {
             jumpPos.transform.position = new Vector2(transform.position.x, transform.position.y);
             // jump.Play();
