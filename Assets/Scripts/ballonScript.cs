@@ -24,5 +24,7 @@ public class ballonScript : MonoBehaviour {
             other.gameObject.GetComponent<Enemy>().health -= 1;
             Destroy(gameObject);
         }
+
+        
     }
 }
