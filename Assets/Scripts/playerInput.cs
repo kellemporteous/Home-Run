@@ -17,7 +17,11 @@ public class playerInput : MonoBehaviour {
     // public float amountToMove;    // 
 
     public Text countText;
-    public int count;
+    public GameObject[] healthImages;
+    public int maxHealth;
+    public int currentHealth;
+    public GameObject spawner;
+    public float startTime;
 
     public bool goingDown;      //wink wink
     public float jumpheight;   //height to jump
@@ -62,7 +66,11 @@ public class playerInput : MonoBehaviour {
             jumpPos = GameObject.FindGameObjectWithTag("jumposP2");
 
         }
-        count = 0;
+        WBCOUNT = 0;
+        maxHealth = healthImages.Length;
+        currentHealth = maxHealth;
+        spawner = GameObject.FindGameObjectWithTag("spawner");
+        startTime = Time.time;
     }
 
 
@@ -71,6 +79,27 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
+        //testing if balloon count goes up after key is pressed
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("R is being pressed");
+            //will return minimum of 12, count + 3. 12 will be limit of balloons
+            WBCOUNT = Mathf.Min(WBCOUNT + 3, 12);
+            SetCountText();
+        }
+        if (currentHealth <= 0)
+        {
+
+            //To do: Google for loop and have the health images reset to active	
+            spawner.GetComponent<playerdist>().spawning = true;
+            currentHealth = maxHealth;
+            startTime = Time.time;
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            currentHealth -= 1;
+            healthImages[currentHealth].SetActive(false);
+        }
 
         throwtimer -= 1;    
                   
@@ -91,7 +120,7 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetAxis("horizontalP1") == 0f))
+        if ((Input.GetAxis("horizontalP1") == 0f) || (Input.GetAxis("Horizontal") == 0f))
             {
             ani.SetBool("iswalking", false);
             
@@ -100,7 +129,7 @@ public class playerInput : MonoBehaviour {
            
         }
 
-        if ((Input.GetAxis("horizontalP1") == 0f && !notrunning))
+        if ((Input.GetAxis("horizontalP1") == 0f && !notrunning || (Input.GetAxis("Horizontal") == 0f && !notrunning)))
         {
             if (timertime <= 1)
             {
@@ -253,15 +282,16 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetButtonDown("B_buttonP1")  && WBCOUNT != 0 && p1))
+        if ((Input.GetButtonDown("B_buttonP1")  && WBCOUNT > 0 && p1) || (Input.GetKeyDown(KeyCode.KeypadEnter) && WBCOUNT > 0))
         {
            if (p1 && throwtimer <= 0)
             ani.SetTrigger("throw");
             Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
             WBCOUNT -= 1;
             throwtimer = 10;
+            SetCountText();
         }
-        if (Input.GetButtonDown("B_buttonP2") && WBCOUNT != 0 && !p1)
+        if (Input.GetButtonDown("B_buttonP2") && WBCOUNT > 0 && !p1)
         {
             if (!p1 && throwtimer <= 0)
             {
@@ -269,6 +299,7 @@ public class playerInput : MonoBehaviour {
                 Instantiate(balloonPrefab, transform.position, Quaternion.identity);
                 WBCOUNT -= 1;
                 throwtimer = 10;
+                SetCountText();
             }
         }
 
@@ -280,7 +311,7 @@ public class playerInput : MonoBehaviour {
     //Counts when player collects ballons, but doesn't exceed the limit set
     void SetCountText ()
     {
-        countText.text = "" + count.ToString();
+        countText.text = "" + WBCOUNT.ToString();
     }
 
   public void  OnTriggerEnter2D(Collider2D other)
@@ -291,16 +322,18 @@ public class playerInput : MonoBehaviour {
          WBCOUNT += 1;
          Destroy(other.gameObject);
        }
+        //Checking if enemy gameobject has hit player, if so lose 1 health and 1 healthImage
+        if (other.gameObject.tag == "Enemy")
+        {
+            currentHealth -= 1;
+            healthImages[currentHealth].SetActive(false);
+        }
     }
+    
     void FixedUpdate()
         {
 
-        //testing if balloon count goes up after key is pressed
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log("R is being pressed");
-            SetCountText();
-        }
+        
 
 
         if ((Input.GetButtonDown("A_buttonP1")&& Input.GetAxis("verticalP1") == -1f && p1 && jumping == false && !goingDown))
