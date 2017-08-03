@@ -14,6 +14,9 @@ public class EnemyType1 : BaseEnemy {
         if (playerDiff <= hitDistance && isAttacking)
         {
             Slap();
+            isSlapActive = false;
+            isAttacking = false;
+            
         }
     }
 

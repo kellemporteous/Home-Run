@@ -26,6 +26,7 @@ public class BaseEnemy : MonoBehaviour {
     public int numWaterBalloons;
     public float visionDistance;
     public float hitDistance;
+    public float targetDistance;
 
     //Variables needed for the cool down system
     public float coolDown;
@@ -60,6 +61,7 @@ public class BaseEnemy : MonoBehaviour {
     public EnemyState enemyState;
     public EnemyState enemyLastState;
 
+    
     // Use this for initialization
     void Start ()
     {
@@ -84,6 +86,9 @@ public class BaseEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        // sets targetdistance to the distance bettween the player
+        targetDistance = Vector3.Distance(transform.position, player.transform.position);
+
         //Setting The current Position
         currentPosition = transform.position;
         
@@ -223,7 +228,7 @@ public class BaseEnemy : MonoBehaviour {
         isAttacking = false;
         //reset cool down
         coolDownTimer = coolDown;
-        animator.SetTrigger("EnemySlap");
+        animator.SetBool("throw",true);
     }
 
     public void EndOfSlap()
@@ -256,15 +261,15 @@ public class BaseEnemy : MonoBehaviour {
         }
 
         // checking if count is higher than 3 and if AI is in correct state
-        if (count >= 2 && enemyState == EnemyState.Attack)
-        {
+        if (count >= 2 && enemyState == EnemyState.Attack && targetDistance > 2)
+            {
             //if true change states
             enemyState = EnemyState.Special;
             isSpecialActive = true;
-        }
+             }
 
-        // checking if count is still higher than 3 as well as current state
-        else if (count < 2 && enemyState == EnemyState.Special)
+        // checking if two close to target to throw ballon
+        else if ( targetDistance < 2)
         {
             //if true change states
             enemyState = EnemyState.Attack;

@@ -28,13 +28,13 @@ public class AnimationController : MonoBehaviour {
             switch (enemy.enemyState)
             {
                 case BaseEnemy.EnemyState.Idle:
-                    animator.SetTrigger("EnemyIdle");
+                    //animator.SetTrigger("iswalking");
                     break;
                 case BaseEnemy.EnemyState.Walk:
-                    animator.SetTrigger("EnemyWalk");
+                    animator.SetTrigger("iswalking");
                     break;
                 case BaseEnemy.EnemyState.Attack:
-                    animator.SetTrigger("EnemyRun");
+                    animator.SetTrigger("throw");
                     break;
             }
         }
