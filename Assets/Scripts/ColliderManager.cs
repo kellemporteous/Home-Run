@@ -39,7 +39,7 @@ public class ColliderManager : MonoBehaviour {
         spritesList.Add(sprite);
         int index = spritesList.IndexOf(sprite);
         PolygonCollider2D spriteCollider = gameObject.AddComponent<PolygonCollider2D>();
-        spriteCollider.isTrigger = isATrigger;
+        spriteCollider.isTrigger = true;
 
         spriteColliders.Add(index, spriteCollider);
         yield return new WaitForEndOfFrame();
@@ -66,6 +66,10 @@ public class ColliderManager : MonoBehaviour {
         spriteColliders = new Dictionary<int, PolygonCollider2D>();
 
         Frame = spritesList.IndexOf(spriteRenderer.sprite);
+
+        Rigidbody2D ridgbody = gameObject.AddComponent<Rigidbody2D>();
+        if (ridgbody != null)
+        ridgbody.isKinematic = true;
     }
 
     private void LateUpdate()
