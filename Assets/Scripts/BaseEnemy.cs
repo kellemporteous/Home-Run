@@ -86,6 +86,16 @@ public class BaseEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        // flips the sprite to look the direction of its target
+        if (player.transform.position.x <= transform.position.x)
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+        }
+
         // sets targetdistance to the distance bettween the player
         targetDistance = Vector3.Distance(transform.position, player.transform.position);
 

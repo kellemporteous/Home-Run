@@ -35,5 +35,6 @@ public class EnemyType1 : BaseEnemy {
             }
         }
     }
+  
 
 }

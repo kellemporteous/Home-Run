@@ -72,6 +72,8 @@ public class playerInput : MonoBehaviour {
 
     {
 
+
+
         throwtimer -= 1;    
                   
 
