@@ -39,7 +39,7 @@ public class ColliderManager : MonoBehaviour {
         spritesList.Add(sprite);
         int index = spritesList.IndexOf(sprite);
         PolygonCollider2D spriteCollider = gameObject.AddComponent<PolygonCollider2D>();
-        spriteCollider.isTrigger = true;
+        spriteCollider.isTrigger = isATrigger;
 
         spriteColliders.Add(index, spriteCollider);
         yield return new WaitForEndOfFrame();
