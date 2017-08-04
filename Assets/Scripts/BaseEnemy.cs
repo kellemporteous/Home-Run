@@ -195,7 +195,7 @@ public class BaseEnemy : MonoBehaviour {
 
 
             }
-
+           
             //move towards player
             transform.position = Vector2.MoveTowards(currentPosition, newPosition, speed * Time.deltaTime);
         }
@@ -203,8 +203,8 @@ public class BaseEnemy : MonoBehaviour {
         //checking to see if isAttacking is true
         else if (isAttacking == false)
         {
-
-            if(!isSlapActive)
+           
+            if (!isSlapActive)
             {
                 //Move away from the player
                 transform.position = Vector2.MoveTowards(currentPosition, -newPosition, speed / 4 * Time.deltaTime);
@@ -273,6 +273,7 @@ public class BaseEnemy : MonoBehaviour {
         // checking if count is higher than 3 and if AI is in correct state
         if (count >= 2 && enemyState == EnemyState.Attack && targetDistance > 2)
             {
+            animator.SetBool("iswalking", true);
             //if true change states
             enemyState = EnemyState.Special;
             isSpecialActive = true;
