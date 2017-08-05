@@ -19,6 +19,7 @@ public class playerdist : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        /*
         if (player.transform.position.x <= player2.transform.position.x)
         {
             distancebetween = Vector3.Distance(player.transform.position, player2.transform.position);
@@ -36,6 +37,7 @@ public class playerdist : MonoBehaviour {
         {
             player.transform.position = new Vector3(spawnpoint.transform.position.x, spawnpoint.transform.position.y);
             spawning = false;
-        }
+        }*/
     }
+
 }

@@ -42,6 +42,9 @@ public class BaseEnemy : MonoBehaviour {
     //Vector2 positions declared
     protected Vector2 newPosition;
     protected Vector2 currentPosition;
+    protected Vector2 lastPosition;
+
+    protected Transform playerLoc;
 
     //Declaring the playerInfo
     protected PlayerHealth playerInfo;
@@ -76,6 +79,8 @@ public class BaseEnemy : MonoBehaviour {
         //Set enemy state to idle on start
         enemyState = EnemyState.Idle;
 
+        lastPosition = transform.position;
+
         //setting booleans when the game starts
         isAttacking = false;
         isSpecialActive = false;
@@ -86,20 +91,21 @@ public class BaseEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        // flips the sprite to look the direction of its target
-        if (player.transform.position.x <= transform.position.x)
+
+        if (player != null)
         {
-            gameObject.GetComponent<SpriteRenderer>().flipX = true;
+            playerLoc = player.transform;
         }
-        else
+
+        else if (player == null)
         {
-            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+            playerLoc = transform;
         }
 
         // sets targetdistance to the distance bettween the player
-        targetDistance = Vector3.Distance(transform.position, player.transform.position);
-
+        targetDistance = Vector3.Distance(transform.position, playerLoc.position);
         //Setting The current Position
+
         currentPosition = transform.position;
         
         //Setting the max amount of water balloons held at one time
@@ -112,6 +118,7 @@ public class BaseEnemy : MonoBehaviour {
         ScanForFriends();
         EnemyBehaviour();
         EnemyLogic();
+        FacingDirection();
         enemyLastState = enemyState;
 
 	}
@@ -163,24 +170,26 @@ public class BaseEnemy : MonoBehaviour {
             positionY = Mathf.Clamp(positionY, -radiusY, radiusY);
         }
 
-        if (currentPosition == newPosition)
+        /*if (currentPosition == newPosition)
         {
             enemyState = EnemyState.Idle;
         }
-
+        */
     }
     //Function will only be called when eney state is set to attack
     void Attack()
     {
 
-        // setting the player position to newPosition
-        newPosition = player.transform.position;
+            // setting the player position to newPosition
+            newPosition = playerLoc.position;
+
 
         //creating a random variable
         float canThrow = Random.Range(0, 100);
 
+
         //getting the distance from the player to the AI
-        float playerDiff = (player.transform.position - transform.position).magnitude;
+        float playerDiff = (playerLoc.position - transform.position).magnitude;
 
         //checking to see if isAttacking is true
         if (isAttacking == true)
@@ -291,6 +300,34 @@ public class BaseEnemy : MonoBehaviour {
     void FacingDirection()
     {
 
+        SpriteRenderer rend = gameObject.GetComponent<SpriteRenderer>();
+
+
+        // flips the sprite to look the direction of its target
+        if (playerLoc.position.x <= currentPosition.x)
+        {
+            rend.flipX = true;
+        }
+        else if (playerLoc.position.x > currentPosition.x)
+        {
+            rend.flipX = false;
+        }
+
+        if (lastPosition.x < currentPosition.x)
+        {
+            rend.flipX = false;
+        }
+
+        else if (lastPosition.x > currentPosition.x)
+        {
+            rend.flipX = true;
+        }
+        else
+        {
+            rend.flipX = rend.flipX;
+        }
+
+        lastPosition = currentPosition;
     }
 
     //Function will control the cooldown mechanic
@@ -319,7 +356,7 @@ public class BaseEnemy : MonoBehaviour {
     {
 
         //finding the distance between the player and AI
-        float playerDiff = (player.transform.position - transform.position).magnitude;
+        float playerDiff = (playerLoc.position - transform.position).magnitude;
 
         //checking if the AI can see the player
         if (playerDiff <= visionDistance)
@@ -336,11 +373,11 @@ public class BaseEnemy : MonoBehaviour {
         }
 
         //checking to see if player existed
-        if (player == null)
+       /* if (player == null)
         {
             //if not change states
             enemyState = EnemyState.Idle;
-        }
+        }*/
 
     }
 
