@@ -40,6 +40,7 @@ public class playerInput : MonoBehaviour {
     public SpriteRenderer thisspriterenderer;
     public int throwtimer;
     public bool throwbool;
+    public Text wbcounter;
    
 
     // Use this for initialization
@@ -71,8 +72,8 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
-
-
+        string wbcountstring = WBCOUNT.ToString();
+        wbcounter.text = wbcountstring;
 
         throwtimer -= 1;    
                   
@@ -290,7 +291,7 @@ public class playerInput : MonoBehaviour {
         if (other.gameObject.tag== "waterball" )
        {
           print(other.gameObject.name);
-         WBCOUNT += 1;
+         WBCOUNT += 6;
          Destroy(other.gameObject);
        }
     }

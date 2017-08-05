@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BaseEnemy : MonoBehaviour {
+public class BaseEnemy : MonoBehaviour
+{
 
     //Declare game objects needed
     protected GameObject enemy;
@@ -64,9 +65,9 @@ public class BaseEnemy : MonoBehaviour {
     public EnemyState enemyState;
     public EnemyState enemyLastState;
 
-    
+
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         //setting the variables to game objects
         enemy = GameObject.FindGameObjectWithTag("Enemy");
@@ -87,9 +88,9 @@ public class BaseEnemy : MonoBehaviour {
         isSlapActive = false;
 
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
 
         if (player != null)
@@ -107,7 +108,7 @@ public class BaseEnemy : MonoBehaviour {
         //Setting The current Position
 
         currentPosition = transform.position;
-        
+
         //Setting the max amount of water balloons held at one time
         if (numWaterBalloons >= 3)
         {
@@ -121,7 +122,7 @@ public class BaseEnemy : MonoBehaviour {
         FacingDirection();
         enemyLastState = enemyState;
 
-	}
+    }
 
     void Idle()
     {
@@ -213,7 +214,7 @@ public class BaseEnemy : MonoBehaviour {
         else if (isAttacking == false)
         {
 
-            if(!isSlapActive)
+            if (!isSlapActive)
             {
                 //Move away from the player
                 transform.position = Vector2.MoveTowards(currentPosition, -newPosition, speed / 4 * Time.deltaTime);
@@ -247,7 +248,7 @@ public class BaseEnemy : MonoBehaviour {
         isAttacking = false;
         //reset cool down
         coolDownTimer = coolDown;
-        animator.SetBool("throw",true);
+        animator.SetBool("throw", true);
     }
 
     public void EndOfSlap()
@@ -276,19 +277,19 @@ public class BaseEnemy : MonoBehaviour {
             {
                 //add 1 increment to count equal to the amount of game objects in the list
                 count++;
-            } 
+            }
         }
 
         // checking if count is higher than 3 and if AI is in correct state
         if (count >= 2 && enemyState == EnemyState.Attack && targetDistance > 2)
-            {
+        {
             //if true change states
             enemyState = EnemyState.Special;
             isSpecialActive = true;
-             }
+        }
 
         // checking if two close to target to throw ballon
-        else if ( targetDistance < 2)
+        else if (targetDistance < 2)
         {
             //if true change states
             enemyState = EnemyState.Attack;
@@ -412,7 +413,7 @@ public class BaseEnemy : MonoBehaviour {
             if (collision.gameObject == player)
             {
                 //if true, reduce the amount of health by damage
-               playerInfo.currentHealth = playerInfo.currentHealth - damage;
+                playerInfo.currentHealth = playerInfo.currentHealth - damage;
             }
         }
     }
