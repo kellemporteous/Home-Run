@@ -41,6 +41,7 @@ public class playerInput : MonoBehaviour {
     public int throwtimer;
     public bool throwbool;
     public Text wbcounter;
+    public bool iswalking;
    
 
     // Use this for initialization
@@ -73,6 +74,8 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
+        
+
         string wbcountstring = WBCOUNT.ToString();
         wbcounter.text = wbcountstring;
 
@@ -96,13 +99,14 @@ public class playerInput : MonoBehaviour {
 
 
         if ((Input.GetAxis("horizontalP1") == 0f))
-            {
+        {
             ani.SetBool("iswalking", false);
             
             if (runtimer && notrunning)
                 notrunning = false;
-           
+
         }
+       
 
         if ((Input.GetAxis("horizontalP1") == 0f && !notrunning))
         {
@@ -114,9 +118,12 @@ public class playerInput : MonoBehaviour {
                 
             }
         }
+      
 
         if ((Input.GetAxis("horizontalP1") == -1f && p1 && transform.position.x <= right.position.x))
         {
+
+            gameObject.GetComponent<audioMng>().iswalking = true;
             if (p1)
             {
                 transform.position = new Vector2(transform.position.x + speed / 100, transform.position.y);
@@ -136,9 +143,15 @@ public class playerInput : MonoBehaviour {
 
                 timertime = runtimerintial;
             }
+           
+        }
+        else
+        {
+            gameObject.GetComponent<audioMng>().iswalking = false;
         }
         if ((Input.GetAxis("horizontalP2") == -1f && !p1))
         {
+
             if (!p1)
             {
                 player2.transform.position = new Vector2(player2.transform.position.x + speed / 100,transform.position.y);
