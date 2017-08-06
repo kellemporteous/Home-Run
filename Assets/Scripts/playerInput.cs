@@ -31,6 +31,7 @@ public class playerInput : MonoBehaviour {
     public string playerstring;
     public GameObject player2;
     private GameObject player;
+    public GameObject[] p2infoobjs;
     public bool notrunning;
     public float timertime;
     public float runtimerintial;
@@ -42,7 +43,8 @@ public class playerInput : MonoBehaviour {
     public bool throwbool;
     public Text wbcounter;
     public bool iswalking;
-   
+
+    
 
     // Use this for initialization
     void Start()
@@ -66,6 +68,7 @@ public class playerInput : MonoBehaviour {
 
         }
         count = 0;
+       
     }
 
 
@@ -74,7 +77,18 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
-        
+      
+        if (!player2.activeInHierarchy && Input.GetButtonDown ("startbuttonP2"))
+        {
+         
+            foreach (GameObject i in p2infoobjs)
+            {
+                i.SetActive (true);
+            }
+            player2.SetActive(true);
+           
+
+        }
 
         string wbcountstring = WBCOUNT.ToString();
         wbcounter.text = wbcountstring;
@@ -98,7 +112,15 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetAxis("horizontalP1") == 0f))
+        if ((Input.GetAxis("horizontalP1") == 0f)&& p1)
+        {
+            ani.SetBool("iswalking", false);
+
+            if (runtimer && notrunning)
+                notrunning = false;
+
+        }
+        if ((Input.GetAxis("horizontalP2") == 0f) && !p1)
         {
             ani.SetBool("iswalking", false);
 
@@ -280,6 +302,7 @@ public class playerInput : MonoBehaviour {
             if (p1 && throwtimer <= 0)
             ani.SetTrigger("throw");
             Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
+            balloonPrefab.GetComponent<ballonScript>().player = gameObject;
             WBCOUNT -= 1;
             throwtimer = 10;
         }
@@ -289,6 +312,7 @@ public class playerInput : MonoBehaviour {
             {
                 ani.SetTrigger("throw");
                 Instantiate(balloonPrefab, transform.position, Quaternion.identity);
+                balloonPrefab.GetComponent<ballonScript>().player = gameObject;
                 WBCOUNT -= 1;
                 throwtimer = 10;
             }

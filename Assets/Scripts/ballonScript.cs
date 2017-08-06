@@ -12,7 +12,7 @@ public class ballonScript : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+       
 		left = player.GetComponent<SpriteRenderer>().flipX;
         if (left)
         {
