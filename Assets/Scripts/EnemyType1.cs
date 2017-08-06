@@ -22,19 +22,20 @@ public class EnemyType1 : BaseEnemy {
 
     public override void OnCollisionEnter2D(Collision2D collision)
     {
+
         if (enemyState != EnemyState.Special)
         {
             base.OnCollisionEnter2D(collision);
         }
         if (enemyState == EnemyState.Special)
         {
-            if (collision.gameObject == player)
+            if (collision.gameObject.tag == "Player")
             {
+                Debug.Log("OH MY GEWD SPECIAL");
                 //if true, reduce the amount of health by damage
-                playerInfo.currentHealth = playerInfo.currentHealth - (damage * 2);
+                collision.gameObject.GetComponent<PlayerHealth>().currentHealth -= damage;
             }
         }
-    }
-  
 
+    }
 }

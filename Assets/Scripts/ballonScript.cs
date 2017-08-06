@@ -45,12 +45,12 @@ public class ballonScript : MonoBehaviour {
         if (other.gameObject.tag == ("Enemy") )
         {
             
-            other.gameObject.GetComponent<Enemy>().health -= 1;
+            other.gameObject.GetComponent<BaseEnemy>().health -= 1;
             Destroy(gameObject);
         }
         if (other.gameObject.tag == ("Enemy") )
         {
-            other.gameObject.GetComponent<Enemy>().health -= 1;
+            other.gameObject.GetComponent<BaseEnemy>().health -= 1;
             Destroy(gameObject);
         }
 

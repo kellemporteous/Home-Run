@@ -324,9 +324,9 @@ public class playerInput : MonoBehaviour {
 
     }
     //Counts when player collects ballons, but doesn't exceed the limit set
-    void SetCountText ()
+ void SetCountText ()
     {
-        countText.text = "" + count.ToString();
+        //countText.text = "" + count.ToString();
     }
 
   public void  OnTriggerEnter2D(Collider2D other)

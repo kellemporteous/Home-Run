@@ -61,8 +61,9 @@ public class LittleBrother : MonoBehaviour {
     void AILogic()
     {
         //Calculating the distances between the AI and other objects
-        var targetDiff = (target.transform.position - transform.position).magnitude;
-        var enemyDiff = (enemy.transform.position - transform.position).magnitude;
+        float targetDiff = (target.transform.position - transform.position).magnitude;
+        float enemyDiff = enemy != null? (enemy.transform.position - transform.position).magnitude: float.MaxValue;
+
 
         //Checking to see if the AI is between the parameters
         if (enemyDiff <= maxEnemyDistance || targetDiff >= minTargetDistance)

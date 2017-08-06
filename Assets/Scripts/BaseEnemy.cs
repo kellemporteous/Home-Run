@@ -74,7 +74,6 @@ public class BaseEnemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
 
         //setting playerInfo to be able to call variables and function for the PlayerHealth script
-        playerInfo = GetComponent<PlayerHealth>();
         animator = GetComponent<Animator>();
 
         //Set enemy state to idle on start
@@ -407,14 +406,17 @@ public class BaseEnemy : MonoBehaviour
     //Function that controls collisions
     public virtual void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log(collision.gameObject.name);
         //checking if isAttacking is true
         if (isAttacking == true)
         {
             //checking id collision was with player
-            if (collision.gameObject == player)
+            if (collision.gameObject.tag == "Player")
             {
+                Debug.Log("OH MY GEWD");
+                collision.gameObject.GetComponent<PlayerHealth>().currentHealth -= damage;
                 //if true, reduce the amount of health by damage
-                playerInfo.currentHealth = playerInfo.currentHealth - damage;
+               // playerInfo.currentHealth = playerInfo.currentHealth - damage;
             }
         }
     }

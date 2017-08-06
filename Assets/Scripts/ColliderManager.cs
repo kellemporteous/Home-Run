@@ -67,9 +67,9 @@ public class ColliderManager : MonoBehaviour {
 
         Frame = spritesList.IndexOf(spriteRenderer.sprite);
 
-        Rigidbody2D ridgbody = gameObject.AddComponent<Rigidbody2D>();
+       /* Rigidbody2D ridgbody = gameObject.AddComponent<Rigidbody2D>();
         if (ridgbody != null)
-        ridgbody.isKinematic = true;
+        ridgbody.isKinematic = true;*/
     }
 
     private void LateUpdate()
