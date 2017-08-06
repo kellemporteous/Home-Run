@@ -246,6 +246,7 @@ public class BaseEnemy : MonoBehaviour
         Debug.Log("Slap");
         isSlapActive = true;
         isAttacking = false;
+        EndOfSlap();
         //reset cool down
         coolDownTimer = coolDown;
         animator.SetBool("throw", true);

@@ -46,6 +46,7 @@ public class playerInput : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        
         thisspriterenderer = gameObject.GetComponent<SpriteRenderer>();
         ani = gameObject.GetComponent<Animator>();
         playerRB = this.gameObject.GetComponent<Rigidbody2D>();
