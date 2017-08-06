@@ -101,17 +101,21 @@ public class playerInput : MonoBehaviour {
         if ((Input.GetAxis("horizontalP1") == 0f))
         {
             ani.SetBool("iswalking", false);
-            
+
             if (runtimer && notrunning)
                 notrunning = false;
 
         }
-       
+
+
 
         if ((Input.GetAxis("horizontalP1") == 0f && !notrunning))
         {
             if (timertime <= 1)
             {
+               
+                gameObject.GetComponent<audioMng>().iswalking = false;
+                
                 runtimer = false;
                 timertime = 0;
                 notrunning = true;
@@ -145,13 +149,10 @@ public class playerInput : MonoBehaviour {
             }
            
         }
-        else
-        {
-            gameObject.GetComponent<audioMng>().iswalking = false;
-        }
+       
         if ((Input.GetAxis("horizontalP2") == -1f && !p1))
         {
-
+            gameObject.GetComponent<audioMng>().iswalking = true;
             if (!p1)
             {
                 player2.transform.position = new Vector2(player2.transform.position.x + speed / 100,transform.position.y);
@@ -172,6 +173,7 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetAxis("horizontalP1") == 1f && p1 && transform.position.x >= left.position.x))
         {
+            gameObject.GetComponent<audioMng>().iswalking = true;
             thisspriterenderer.flipX = true;
             if (!runtimer && notrunning)
             {
@@ -188,6 +190,7 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetAxis("horizontalP2") == 1f && !p1 && transform.position.x >= left.position.x))
         {
+            gameObject.GetComponent<audioMng>().iswalking = true;
             thisspriterenderer.flipX = true;
             if (!runtimer && notrunning)
             {
@@ -204,7 +207,7 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetAxis("verticalP1") == -1f  && p1 && transform.position.y <= up.position.y))
         {
-
+            gameObject.GetComponent<audioMng>().iswalking = true;
             if (!runtimer && notrunning)
             {
                // runtimer = true;
@@ -222,7 +225,7 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetAxis("verticalP2") == -1f && !p1 && transform.position.y <= up.position.y))
         {
-
+            gameObject.GetComponent<audioMng>().iswalking = true;
             if (!runtimer && notrunning)
             {
                 runtimer = true;
@@ -241,6 +244,7 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetAxis("verticalP1") == 1f && p1 && transform.position.y >= down.position.y))
         {
+            gameObject.GetComponent<audioMng>().iswalking = true;
             if (!runtimer && notrunning)
             {
                 runtimer = true;
@@ -255,7 +259,7 @@ public class playerInput : MonoBehaviour {
         }
         if ((Input.GetAxis("verticalP2") == 1f && !p1 && transform.position.y >= down.position.y))
         {
-         
+            gameObject.GetComponent<audioMng>().iswalking = true;
             if (!runtimer && notrunning)
             {
                 runtimer = true;
@@ -272,7 +276,8 @@ public class playerInput : MonoBehaviour {
 
         if ((Input.GetButtonDown("B_buttonP1")  && WBCOUNT != 0 && p1))
         {
-           if (p1 && throwtimer <= 0)
+            
+            if (p1 && throwtimer <= 0)
             ani.SetTrigger("throw");
             Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
             WBCOUNT -= 1;
