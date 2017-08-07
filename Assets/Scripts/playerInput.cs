@@ -144,9 +144,17 @@ public class playerInput : MonoBehaviour {
                 
             }
         }
-      
 
-        if ((Input.GetAxis("horizontalP1") == -1f && p1 && transform.position.x <= right.position.x))
+        if (Input.GetAxis("verticalP1") ==  0f)
+        {
+            
+
+                gameObject.GetComponent<audioMng>().iswalking = false;
+            
+        }
+
+
+                if ((Input.GetAxis("horizontalP1") == -1f && p1 && transform.position.x <= right.position.x))
         {
 
             gameObject.GetComponent<audioMng>().iswalking = true;
