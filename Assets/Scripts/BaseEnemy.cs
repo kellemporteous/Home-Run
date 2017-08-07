@@ -422,7 +422,7 @@ public class BaseEnemy : MonoBehaviour
     }
 
     //Function that controls collisions
-    public virtual void OnCollisionEnter2D(Collision2D collision)
+    public virtual void OnTriggerEnter2D (Collider2D collision)
     {
         Debug.Log(collision.gameObject.name);
         //checking if isAttacking is true

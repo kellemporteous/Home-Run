@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ColliderManager : MonoBehaviour {
 
-    public bool isATrigger;
+    public bool isATrigger = true;
     private bool _processing;
 
     private SpriteRenderer spriteRenderer;
@@ -39,7 +39,7 @@ public class ColliderManager : MonoBehaviour {
         spritesList.Add(sprite);
         int index = spritesList.IndexOf(sprite);
         PolygonCollider2D spriteCollider = gameObject.AddComponent<PolygonCollider2D>();
-        spriteCollider.isTrigger = isATrigger;
+        spriteCollider.isTrigger = true;
 
         spriteColliders.Add(index, spriteCollider);
         yield return new WaitForEndOfFrame();
