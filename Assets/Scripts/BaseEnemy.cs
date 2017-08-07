@@ -58,7 +58,8 @@ public class BaseEnemy : MonoBehaviour
         Idle,
         Walk,
         Attack,
-        Special
+        Special,
+        Death
     }
 
     //Delcaring the EnemyState. Needed/easier to switch states
@@ -89,8 +90,9 @@ public class BaseEnemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public virtual void Update()
     {
+       
 
         if (player != null)
         {
@@ -114,6 +116,11 @@ public class BaseEnemy : MonoBehaviour
             numWaterBalloons = 3;
         }
 
+        if (health <= 0)
+        {
+            enemyState = EnemyState.Death;
+        }
+
         //functions that need to be called every update
         ScanForFriends();
         EnemyBehaviour();
@@ -121,6 +128,14 @@ public class BaseEnemy : MonoBehaviour
         FacingDirection();
         enemyLastState = enemyState;
 
+    }
+
+    void Death()
+    {
+        if (health <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     void Idle()
@@ -399,6 +414,9 @@ public class BaseEnemy : MonoBehaviour
                 break;
             case EnemyState.Special:
                 Special();
+                break;
+            case EnemyState.Death:
+                Death();
                 break;
         }
     }

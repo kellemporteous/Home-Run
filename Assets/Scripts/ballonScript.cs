@@ -8,22 +8,22 @@ public class ballonScript : MonoBehaviour {
     public string direction;
     public bool left;
     public GameObject player;
-   
-	// Use this for initialization
-	void Start ()
+
+    // Use this for initialization
+    void Start()
     {
-       
-		left = player.GetComponent<SpriteRenderer>().flipX;
-        if (left)
-        {
-           
-        }
-        else
-        {
-            direction = "+";
-        }
+
+        left = player.GetComponent<SpriteRenderer>().flipX;
+        /*   if (left)
+            {
+                direction = "+";
+            }
+            else
+            {
+                direction = "+";
+            }
+        }*/
     }
-	
 	// Update is called once per frame
 	void Update ()
     {

@@ -19,7 +19,6 @@ public class playerdist : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        /*
         if (player.transform.position.x <= player2.transform.position.x)
         {
             distancebetween = Vector3.Distance(player.transform.position, player2.transform.position);
@@ -29,15 +28,17 @@ public class playerdist : MonoBehaviour {
         {
             distancebetween = Vector3.Distance(player2.transform.position, player.transform.position);
         }
-        gameObject.transform.position = new Vector3(distancebetween - (distancebetween / 2), transform.position.y);
+        gameObject.transform.position = 0.5f * (player.transform.position + player2.transform.position);
 
 
 
         if (spawning)
         {
             player.transform.position = new Vector3(spawnpoint.transform.position.x, spawnpoint.transform.position.y);
+            player.GetComponent<PlayerHealth>().currentHealth = player.GetComponent<PlayerHealth>().maxHealth;
             spawning = false;
-        }*/
+            
+        }
     }
 
 }
