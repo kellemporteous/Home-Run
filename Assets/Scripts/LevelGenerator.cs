@@ -19,11 +19,11 @@ public class LevelGenerator : MonoBehaviour {
     private GameObject player;
 
 
-    public Scene scene1;
-    public Scene scene2;
+    public Object scene1;
+    public Object scene2;
 
-    public BoxCollider2D enterPoint;
-    public BoxCollider2D exitPoint;
+    public GameObject enterPoint;
+    public GameObject exitPoint;
 
     void Start()
     {
@@ -39,20 +39,27 @@ public class LevelGenerator : MonoBehaviour {
     {
         int enemySpawnPointIndex = enemySpawnPoints.Length;
         int enemyTypeIndex = Random.Range(0, enemiesToSpawn.Length);
-        Instantiate(enemiesToSpawn[enemyTypeIndex], enemySpawnPoints[enemySpawnPointIndex].transform.position, Quaternion.Euler(0, 0, 0));
+        //Instantiate(enemiesToSpawn[enemyTypeIndex], enemySpawnPoints[enemySpawnPointIndex].transform.position, Quaternion.Euler(0, 0, 0));
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (enterPoint && collision.gameObject == player)
+        if (collision.gameObject.tag == "Player")
         {
-            SceneManager.LoadScene(scene1.name);
+            if (collision.gameObject.tag == "EntryPoint")
+            {
+                Debug.Log(collision.gameObject.name);
+                //SceneManager.LoadScene(scene1.name);
+            }
+
+            if (collision.gameObject.tag == "ExitPoint")
+            {
+                Debug.Log(collision.gameObject.name);
+                //SceneManager.LoadScene(scene2.name);
+            }
         }
 
-        if (exitPoint && collision.gameObject == player)
-        {
-            SceneManager.LoadScene(scene2.name);
-        }
+
     }
 
 }

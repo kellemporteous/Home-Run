@@ -23,8 +23,6 @@ public class AnimationController : MonoBehaviour {
 
     void EnemyAnimation()
     {
-        if (!enemy.isSlapActive)
-        {
             switch (enemy.enemyState)
             {
                 case BaseEnemy.EnemyState.Idle:
@@ -34,9 +32,9 @@ public class AnimationController : MonoBehaviour {
                     animator.SetTrigger("iswalking");
                     break;
                 case BaseEnemy.EnemyState.Attack:
-                    animator.SetTrigger("throw");
+
+                    animator.SetTrigger("isrunning");
                     break;
-            }
-        }
+            }       
     }
 }
