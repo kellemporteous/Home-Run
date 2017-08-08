@@ -154,7 +154,7 @@ public class playerInput : MonoBehaviour {
         }
 
 
-                if ((Input.GetAxis("horizontalP1") == -1f && p1 && transform.position.x <= right.position.x))
+                if ((Input.GetAxis("horizontalP1") == -1f || Input.GetKey (KeyCode.RightArrow) && p1 && transform.position.x <= right.position.x))
         {
 
             gameObject.GetComponent<audioMng>().iswalking = true;
@@ -180,7 +180,7 @@ public class playerInput : MonoBehaviour {
            
         }
        
-        if ((Input.GetAxis("horizontalP2") == -1f && !p1))
+        if ((Input.GetAxis("horizontalP2") == -1f  && !p1))
         {
             gameObject.GetComponent<audioMng>().iswalking = true;
             if (!p1)
@@ -201,7 +201,7 @@ public class playerInput : MonoBehaviour {
            
         }
 
-        if ((Input.GetAxis("horizontalP1") == 1f && p1 && transform.position.x >= left.position.x))
+        if ((Input.GetAxis("horizontalP1") == 1f || Input.GetKey(KeyCode.LeftArrow) && p1 && transform.position.x >= left.position.x))
         {
             gameObject.GetComponent<audioMng>().iswalking = true;
             thisspriterenderer.flipX = true;
@@ -235,7 +235,7 @@ public class playerInput : MonoBehaviour {
                 transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
         }
 
-        if ((Input.GetAxis("verticalP1") == -1f  && p1 && transform.position.y <= up.position.y))
+        if ((Input.GetAxis("verticalP1") == -1f || Input.GetKey(KeyCode.UpArrow) && p1 && transform.position.y <= up.position.y))
         {
             gameObject.GetComponent<audioMng>().iswalking = true;
             if (!runtimer && notrunning)
@@ -272,7 +272,7 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetAxis("verticalP1") == 1f && p1 && transform.position.y >= down.position.y))
+        if ((Input.GetAxis("verticalP1") == 1f || Input.GetKey(KeyCode.DownArrow) && p1 && transform.position.y >= down.position.y))
         {
             gameObject.GetComponent<audioMng>().iswalking = true;
             if (!runtimer && notrunning)
@@ -304,7 +304,7 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetButtonDown("B_buttonP1")  && WBCOUNT != 0 && p1))
+        if ((Input.GetButtonDown("B_buttonP1") || Input.GetKeyDown(KeyCode.LeftControl) && WBCOUNT != 0 && p1))
         {
             
             if (p1 && throwtimer <= 0)
@@ -314,7 +314,7 @@ public class playerInput : MonoBehaviour {
             WBCOUNT -= 1;
             throwtimer = 10;
         }
-        if (Input.GetButtonDown("B_buttonP2") && WBCOUNT != 0 && !p1)
+        if (Input.GetButtonDown("B_buttonP2")  && WBCOUNT != 0 && !p1)
         {
             if (!p1 && throwtimer <= 0)
             {
@@ -357,7 +357,7 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetButtonDown("A_buttonP1")&& Input.GetAxis("verticalP1") == -1f && p1 && jumping == false && !goingDown))
+        if ((Input.GetButtonDown("A_buttonP1")&& Input.GetAxis("verticalP1") == -1f || Input.GetKey(KeyCode.Space) && p1 && jumping == false && !goingDown))
         {
             jumpPos.transform.position = new Vector2(transform.position.x, transform.position.y);
             // jump.Play();
@@ -366,7 +366,7 @@ public class playerInput : MonoBehaviour {
             gameObject.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, jumpSpeed - Time.deltaTime));
             jumping = true;
         }
-        if ((Input.GetButtonDown("A_buttonP2") && Input.GetAxis("verticalP2") == -1f && !p1 && jumping == false && !goingDown))
+        if ((Input.GetButtonDown("A_buttonP2") && Input.GetAxis("verticalP2")  == -1f  && !p1 && jumping == false && !goingDown))
         {
             jumpPos.transform.position = new Vector2(transform.position.x, transform.position.y);
             // jump.Play();
