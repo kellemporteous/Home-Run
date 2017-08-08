@@ -154,7 +154,7 @@ public class playerInput : MonoBehaviour {
         }
 
 
-                if ((Input.GetAxis("horizontalP1") == -1f || Input.GetKey (KeyCode.RightArrow) && p1 && transform.position.x <= right.position.x))
+                if (((Input.GetAxis("horizontalP1") == -1f || Input.GetKey (KeyCode.RightArrow)) && p1 && transform.position.x <= right.position.x))
         {
 
             gameObject.GetComponent<audioMng>().iswalking = true;
@@ -201,7 +201,7 @@ public class playerInput : MonoBehaviour {
            
         }
 
-        if ((Input.GetAxis("horizontalP1") == 1f || Input.GetKey(KeyCode.LeftArrow) && p1 && transform.position.x >= left.position.x))
+        if (((Input.GetAxis("horizontalP1") == 1f || Input.GetKey(KeyCode.LeftArrow)) && p1 && transform.position.x >= left.position.x))
         {
             gameObject.GetComponent<audioMng>().iswalking = true;
             thisspriterenderer.flipX = true;
@@ -235,7 +235,7 @@ public class playerInput : MonoBehaviour {
                 transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
         }
 
-        if ((Input.GetAxis("verticalP1") == -1f || Input.GetKey(KeyCode.UpArrow) && p1 && transform.position.y <= up.position.y))
+        if (((Input.GetAxis("verticalP1") == -1f || Input.GetKey(KeyCode.UpArrow)) && p1 && transform.position.y <= up.position.y))
         {
             gameObject.GetComponent<audioMng>().iswalking = true;
             if (!runtimer && notrunning)
@@ -272,7 +272,7 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetAxis("verticalP1") == 1f || Input.GetKey(KeyCode.DownArrow) && p1 && transform.position.y >= down.position.y))
+        if (((Input.GetAxis("verticalP1") == 1f || Input.GetKey(KeyCode.DownArrow)) && p1 && transform.position.y >= down.position.y))
         {
             gameObject.GetComponent<audioMng>().iswalking = true;
             if (!runtimer && notrunning)
@@ -357,7 +357,7 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetButtonDown("A_buttonP1")&& Input.GetAxis("verticalP1") == -1f || Input.GetKey(KeyCode.Space) && p1 && jumping == false && !goingDown))
+        if (((Input.GetButtonDown("A_buttonP1")&& Input.GetAxis("verticalP1") == -1f || Input.GetKey(KeyCode.Space)) && p1 && jumping == false && !goingDown))
         {
             jumpPos.transform.position = new Vector2(transform.position.x, transform.position.y);
             // jump.Play();
