@@ -38,7 +38,6 @@ public class BaseEnemy : MonoBehaviour
     //bools that change AI logic
     public bool isAttacking;
     public bool isSpecialActive;
-    public bool isSlapActive;
 
     //Vector2 positions declared
     protected Vector2 newPosition;
@@ -83,9 +82,8 @@ public class BaseEnemy : MonoBehaviour
         lastPosition = transform.position;
 
         //setting booleans when the game starts
-        isAttacking = false;
+        isAttacking = true;
         isSpecialActive = false;
-        isSlapActive = false;
 
     }
 
@@ -94,18 +92,8 @@ public class BaseEnemy : MonoBehaviour
     {
        
 
-        if (player != null)
-        {
-            playerLoc = player.transform;
-        }
-
-        else if (player == null)
-        {
-            playerLoc = transform;
-        }
-
         // sets targetdistance to the distance bettween the player
-        targetDistance = Vector3.Distance(transform.position, playerLoc.position);
+        targetDistance = Vector3.Distance(transform.position, player.transform.position);
         //Setting The current Position
 
         currentPosition = transform.position;
@@ -132,10 +120,7 @@ public class BaseEnemy : MonoBehaviour
 
     void Death()
     {
-        if (health <= 0)
-        {
-            Destroy(this.gameObject);
-        }
+        Destroy(this.gameObject);
     }
 
     void Idle()
@@ -195,8 +180,8 @@ public class BaseEnemy : MonoBehaviour
     void Attack()
     {
 
-            // setting the player position to newPosition
-            newPosition = playerLoc.position;
+        // setting the player position to newPosition
+        newPosition = player.transform.position;
 
 
         //creating a random variable
@@ -204,7 +189,7 @@ public class BaseEnemy : MonoBehaviour
 
 
         //getting the distance from the player to the AI
-        float playerDiff = (playerLoc.position - transform.position).magnitude;
+        float playerDiff = player != null ? (player.transform.position - transform.position).magnitude : float.MaxValue; ;
 
         //checking to see if isAttacking is true
         if (isAttacking == true)
@@ -212,7 +197,7 @@ public class BaseEnemy : MonoBehaviour
 
 
             //checking if Ai is within hit distance
-            if (playerDiff <= hitDistance && !isSlapActive)
+            if (playerDiff <= hitDistance)
             {
                 //call this function
                 Slap();
@@ -228,12 +213,9 @@ public class BaseEnemy : MonoBehaviour
         else if (isAttacking == false)
         {
 
-            if (!isSlapActive)
-            {
                 //Move away from the player
                 transform.position = Vector2.MoveTowards(currentPosition, -newPosition, speed / 4 * Time.deltaTime);
                 //Calling cool down function only when is attacking is false
-            }
 
             CoolDown();
         }
@@ -258,18 +240,15 @@ public class BaseEnemy : MonoBehaviour
     public void Slap()
     {
         Debug.Log("Slap");
-        isSlapActive = true;
         isAttacking = false;
-        EndOfSlap();
+        //EndOfSlap();
         //reset cool down
-        coolDownTimer = coolDown;
         animator.SetBool("throw", true);
     }
 
     public void EndOfSlap()
     {
         //set is attacking to false
-        isSlapActive = false;
 
     }
     public void IsHit()
@@ -318,32 +297,38 @@ public class BaseEnemy : MonoBehaviour
 
         SpriteRenderer rend = gameObject.GetComponent<SpriteRenderer>();
 
+        if (enemyState != EnemyState.Attack)
+        {
+            if (lastPosition.x < currentPosition.x)
+            {
+                rend.flipX = false;
+            }
 
-        // flips the sprite to look the direction of its target
-        if (playerLoc.position.x <= currentPosition.x)
-        {
-            rend.flipX = true;
-        }
-        else if (playerLoc.position.x > currentPosition.x)
-        {
-            rend.flipX = false;
-        }
-
-        if (lastPosition.x < currentPosition.x)
-        {
-            rend.flipX = false;
-        }
-
-        else if (lastPosition.x > currentPosition.x)
-        {
-            rend.flipX = true;
-        }
-        else
-        {
-            rend.flipX = rend.flipX;
+            else if (lastPosition.x > currentPosition.x)
+            {
+                rend.flipX = true;
+            }
+            else
+            {
+                rend.flipX = rend.flipX;
+            }
         }
 
         lastPosition = currentPosition;
+
+        // flips the sprite to look the direction of its target
+        if (player.transform.position.x <= currentPosition.x)
+        {
+            rend.flipX = true;
+        }
+        else if (player.transform.position.x > currentPosition.x)
+        {
+            rend.flipX = false;
+        }
+
+        
+        
+
     }
 
     //Function will control the cooldown mechanic
@@ -372,7 +357,7 @@ public class BaseEnemy : MonoBehaviour
     {
 
         //finding the distance between the player and AI
-        float playerDiff = (playerLoc.position - transform.position).magnitude;
+        float playerDiff = player != null ? (player.transform.position - transform.position).magnitude : float.MaxValue; ;
 
         //checking if the AI can see the player
         if (playerDiff <= visionDistance)
@@ -432,6 +417,7 @@ public class BaseEnemy : MonoBehaviour
             if (collision.gameObject.tag == "Player")
             {
                 Debug.Log("OH MY GEWD");
+                coolDownTimer = coolDown;
                 collision.gameObject.GetComponent<PlayerHealth>().currentHealth -= damage;
                 //if true, reduce the amount of health by damage
                // playerInfo.currentHealth = playerInfo.currentHealth - damage;

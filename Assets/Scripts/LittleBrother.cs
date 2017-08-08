@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class LittleBrother : MonoBehaviour {
 
@@ -13,7 +14,7 @@ public class LittleBrother : MonoBehaviour {
     //The distance AI loses sight of player
     public float minTargetDistance;
 
-    private GameObject target;
+    private GameObject player;
     private GameObject enemy;
 
     public enum BehaviourState
@@ -29,7 +30,7 @@ public class LittleBrother : MonoBehaviour {
 	void Start ()
     {
         //Declaring the game objects
-        target = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
         enemy = GameObject.FindGameObjectWithTag("Enemy");
 	}
 	
@@ -37,31 +38,50 @@ public class LittleBrother : MonoBehaviour {
 	void Update ()
     {
         // Checks to see if the AI can move
-        if (behaviourState != BehaviourState.Scared)
-        {
-            Movement();
-        }
+
+            LookForTarget();
+        
 
         //These functions will be called every frame
         AILogic();
         AIBehaviour();
 	}
 
-    void Movement()
-    {
-        //getting the distance bewteen the target and AI
-        Vector3 delta = transform.position-target.transform.position;
-        //set the distance to 1 unit
-        delta.Normalize();
 
-        //The AI will move towards the target
-        transform.position = Vector2.MoveTowards(transform.position, target.transform.position + delta*offset, speed * Time.deltaTime);
+    void LookForTarget()
+    {
+        List<GameObject> players = GameObject.FindGameObjectsWithTag("Player").ToList();
+        GameObject closestTarget;
+        float distance = Mathf.Infinity;
+
+        foreach (GameObject target in players)
+        {
+            float diff = (target.transform.position - transform.position).magnitude;
+            if (diff < distance)
+            {
+                closestTarget = target;
+                distance = diff;
+            }
+
+            if (behaviourState != BehaviourState.Scared)
+            {
+                //getting the distance bewteen the target and AI
+                Vector3 delta = transform.position - target.transform.position;
+                //set the distance to 1 unit
+                delta.Normalize();
+
+                //The AI will move towards the target
+                transform.position = Vector2.MoveTowards(transform.position, target.transform.position + delta * offset, speed * Time.deltaTime);
+            }
+        }
+
     }
 
     void AILogic()
     {
+
         //Calculating the distances between the AI and other objects
-        float targetDiff = (target.transform.position - transform.position).magnitude;
+        float targetDiff = player != null ? (player.transform.position - transform.position).magnitude : float.MinValue;
         float enemyDiff = enemy != null? (enemy.transform.position - transform.position).magnitude: float.MaxValue;
 
 
@@ -70,7 +90,7 @@ public class LittleBrother : MonoBehaviour {
         {
             behaviourState = BehaviourState.Scared;
         }
-        else if(enemy == null)
+        else
         {
             behaviourState = BehaviourState.Safe;
         }
