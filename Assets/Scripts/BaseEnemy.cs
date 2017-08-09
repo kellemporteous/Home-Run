@@ -45,6 +45,8 @@ public class BaseEnemy : MonoBehaviour
     protected Vector2 newPosition;
     protected Vector2 currentPosition;
     protected Vector2 lastPosition;
+    protected Vector2 startPosition;
+
 
     protected Transform playerLoc;
 
@@ -82,6 +84,8 @@ public class BaseEnemy : MonoBehaviour
         enemyState = EnemyState.Idle;
 
         lastPosition = transform.position;
+        startPosition = transform.position;
+
 
         //setting booleans when the game starts
         isAttacking = true;
@@ -153,7 +157,7 @@ public class BaseEnemy : MonoBehaviour
             tChange = Time.time + Random.Range(1.0f, 3.0f);
 
             //setting the new X and Y positions to newPosition
-            newPosition = new Vector2(positionX, positionY);
+            newPosition = new Vector2(positionX, positionY) + startPosition;
         }
 
         //Move towards new position
@@ -184,56 +188,69 @@ public class BaseEnemy : MonoBehaviour
     {
 
         // setting the player position to newPosition
+        List<GameObject> players = GameObject.FindGameObjectsWithTag("Player").ToList();
+        GameObject closestTarget;
+        float distance = Mathf.Infinity;
 
 
-        //creating a random variable
-        float canThrow = Random.Range(0, 100);
-
-
-        //getting the distance from the player to the AI
-        float playerDiff = player != null ? (player.transform.position - transform.position).magnitude : float.MaxValue; ;
-
-        //checking to see if isAttacking is true
-        if (isAttacking == true)
+        foreach (GameObject target in players)
         {
+            //creating a random variable
+            float canThrow = Random.Range(0, 100);
 
 
-            //checking if Ai is within hit distance
-            if (playerDiff <= hitDistance)
+            //getting the distance from the player to the AI
+            float playerDiff = target != null ? (target.transform.position - transform.position).magnitude : float.MaxValue; ;
+
+            if (playerDiff < distance)
             {
-                //call this function
-                if (PlaySound == false)
-                {
-                    SoundController.instance.EnemySlap();
-                }
-                Slap();
-
-
+                closestTarget = target;
+                distance = playerDiff;
             }
 
-            //move towards player
-            transform.position = Vector2.MoveTowards(currentPosition, player.transform.position, speed * Time.deltaTime);
-        }
+            //checking to see if isAttacking is true
+            if (isAttacking == true)
+            {
 
-        //checking to see if isAttacking is true
-        else if (isAttacking == false)
-        {
 
+                //checking if Ai is within hit distance
+                if (playerDiff <= hitDistance)
+                {
+                    //call this function
+                    if (PlaySound == false)
+                    {
+                        SoundController.instance.EnemySlap();
+                    }
+                    Slap();
+
+
+                }
+
+                //move towards player
+                transform.position = Vector2.MoveTowards(currentPosition, target.transform.position, speed * Time.deltaTime);
+            }
+
+            //checking to see if isAttacking is true
+            else if (isAttacking == false)
+            {
+                Vector2 toPlayer = (target.transform.position - transform.position).normalized; toPlayer.y = 0;
                 //Move away from the player
-                transform.position = Vector2.MoveTowards(currentPosition, -player.transform.position, speed / 2 * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(currentPosition, currentPosition - toPlayer, speed / 2 * Time.deltaTime);
                 //Calling cool down function only when is attacking is false
 
-            CoolDown();
+                CoolDown();
+            }
+
+            //checking to see if AI is able to throw a water balloon
+            if (canThrow >= 50 && playerDiff >= hitDistance && numWaterBalloons > 0)
+            {
+                //spawn water balloon
+                Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
+                //decrease the number of water balloons being held
+                numWaterBalloons -= 1;
+            }
         }
 
-        //checking to see if AI is able to throw a water balloon
-        if (canThrow >= 50 && playerDiff >= hitDistance && numWaterBalloons > 0)
-        {
-            //spawn water balloon
-            Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
-            //decrease the number of water balloons being held
-            numWaterBalloons -= 1;
-        }
     }
 
     //Function will only be called when enemy state is set to special, use will chnage depending on the child in heriting
