@@ -242,7 +242,6 @@ public class BaseEnemy : MonoBehaviour
     {
         Debug.Log("Slap");
         isSlapping = true;
-        isAttacking = false;
         //EndOfSlap();
         //reset cool down
         coolDownTimer = coolDown;
@@ -425,9 +424,11 @@ public class BaseEnemy : MonoBehaviour
             {
                 Debug.Log("OH MY GEWD");
                 collision.gameObject.GetComponent<PlayerHealth>().currentHealth -= damage;
-                //if true, reduce the amount of health by damage
-               // playerInfo.currentHealth = playerInfo.currentHealth - damage;
-            }
+                    isAttacking = false;
+
+                    //if true, reduce the amount of health by damage
+                    // playerInfo.currentHealth = playerInfo.currentHealth - damage;
+                }
             }
 
         }

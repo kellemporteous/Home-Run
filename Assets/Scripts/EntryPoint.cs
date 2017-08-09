@@ -8,6 +8,12 @@ public class EntryPoint : MonoBehaviour {
 
     void Start()
     {
+        Scene scene = SceneManager.GetActiveScene();
+
+        if (scene.name == "Level1" || scene.name == "FinalLevel")
+        {
+            GetComponent<BoxCollider2D>().enabled = false;
+        }
     }
 
     public void OnTriggerEnter2D(Collider2D collision)

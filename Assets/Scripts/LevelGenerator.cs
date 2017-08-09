@@ -31,8 +31,12 @@ public class LevelGenerator : MonoBehaviour {
 
     void EnemySpawn()
     {
-        int enemySpawnPointIndex = enemySpawnPoints.Length;
-        int enemyTypeIndex = Random.Range(0, enemiesToSpawn.Length);
-        Instantiate(enemiesToSpawn[enemyTypeIndex], enemySpawnPoints[enemySpawnPointIndex].transform.position, Quaternion.Euler(0, 0, 0));
+       
+
+        foreach (Transform spawnPoint in enemySpawnPoints)
+        {
+            int enemyTypeIndex = Random.Range(0, enemiesToSpawn.Length);
+            Instantiate(enemiesToSpawn[enemyTypeIndex], spawnPoint.position, Quaternion.Euler(0, 0, 0));
+        }
     }
 }
