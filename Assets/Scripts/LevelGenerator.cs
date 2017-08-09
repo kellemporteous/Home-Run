@@ -21,12 +21,16 @@ public class LevelGenerator : MonoBehaviour {
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        EnemySpawn();
+        if (!player.activeInHierarchy)
+        {
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
         Instantiate(player, startPoint.transform.position, Quaternion.Euler(0, 0, 0));
 
        
 
-        EnemySpawn();
+      
     }
 
     void EnemySpawn()

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyType1 : BaseEnemy {
 
 
-    public override void Special()
+   /* public override void Special()
     {
         newPosition = player.transform.position;
         transform.position = Vector2.MoveTowards(currentPosition, newPosition, speed * 2 * Time.deltaTime);
@@ -17,7 +17,7 @@ public class EnemyType1 : BaseEnemy {
             isAttacking = false;
             
         }
-    }
+    }*/
 
     public override void OnTriggerEnter2D(Collider2D collision)
     {

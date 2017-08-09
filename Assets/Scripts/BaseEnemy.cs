@@ -111,7 +111,7 @@ public class BaseEnemy : MonoBehaviour
         }
 
         //functions that need to be called every update
-        ScanForFriends();
+     //   ScanForFriends();
         EnemyBehaviour();
         EnemyLogic();
         FacingDirection();
@@ -215,7 +215,7 @@ public class BaseEnemy : MonoBehaviour
         {
 
                 //Move away from the player
-                transform.position = Vector2.MoveTowards(currentPosition, -player.transform.position, speed / 4 * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(currentPosition, -player.transform.position, speed / 2 * Time.deltaTime);
                 //Calling cool down function only when is attacking is false
 
             CoolDown();
@@ -232,10 +232,10 @@ public class BaseEnemy : MonoBehaviour
     }
 
     //Function will only be called when enemy state is set to special, use will chnage depending on the child in heriting
-    public virtual void Special()
+   /* public virtual void Special()
     {
 
-    }
+    }*/
 
     //Function that controls when AI tries to hit the player, use will chnage depending on the child in heriting
     public void Slap()
@@ -259,7 +259,7 @@ public class BaseEnemy : MonoBehaviour
         animator.SetTrigger("EnemHit");
     }
     //Function controls the amount of AI with vision distance of each other
-    void ScanForFriends()
+   /* void ScanForFriends()
     {
         // setting count to 0 everyframe so the same enemy is not counted twice
         int count = 0;
@@ -278,7 +278,7 @@ public class BaseEnemy : MonoBehaviour
         }
 
         // checking if count is higher than 3 and if AI is in correct state
-        if (count >= 2 && enemyState == EnemyState.Attack /*&& targetDistance > 2*/)
+        if (count >= 2 && enemyState == EnemyState.Attack /*&& targetDistance > 2)
         {
             //if true change states
             enemyState = EnemyState.Special;
@@ -286,13 +286,13 @@ public class BaseEnemy : MonoBehaviour
         }
 
         // checking if two close to target to throw ballon
-       /* else if (targetDistance < 2)
+        else if (targetDistance < 2)
         {
             //if true change states
             enemyState = EnemyState.Attack;
             isSpecialActive = false;
-        }*/
-    }
+        }
+    }*/
 
     //Function will control the direction the AI is facing
     void FacingDirection()
@@ -400,8 +400,8 @@ public class BaseEnemy : MonoBehaviour
             case EnemyState.Attack:
                 Attack();
                 break;
-            case EnemyState.Special:
-                Special();
+           case EnemyState.Special:
+              //  Special();
                 break;
             case EnemyState.Death:
                 Death();
