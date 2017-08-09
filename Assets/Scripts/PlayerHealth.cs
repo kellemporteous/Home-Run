@@ -23,7 +23,8 @@ public class PlayerHealth : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (currentHealth <= 0)
+        healthImages[currentHealth].SetActive(false);
+        if (currentHealth <= 0)
         {
 
             spawner.GetComponent<playerdist>().player = gameObject;
