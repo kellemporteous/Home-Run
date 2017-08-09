@@ -33,6 +33,7 @@ public class BaseEnemy : MonoBehaviour
     public float coolDown;
     public float coolDownTimer;
 
+    public bool PlaySound = false;
 
     public float idleCounter;
     //bools that change AI logic
@@ -201,6 +202,10 @@ public class BaseEnemy : MonoBehaviour
             if (playerDiff <= hitDistance)
             {
                 //call this function
+                if (PlaySound == false)
+                {
+                    SoundController.instance.EnemySlap();
+                }
                 Slap();
 
 

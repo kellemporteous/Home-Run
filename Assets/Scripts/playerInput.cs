@@ -18,6 +18,7 @@ public class playerInput : MonoBehaviour {
 
     public Text countText;
     public int count;
+    public bool PlaySound = false;
 
     public bool goingDown;      //wink wink
     public float jumpheight;   //height to jump
@@ -43,7 +44,7 @@ public class playerInput : MonoBehaviour {
     public bool throwbool;
     public Text wbcounter;
     public bool iswalking;
-
+    public bool isslapping;
     
 
     // Use this for initialization
@@ -77,6 +78,12 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
+        if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP1"))
+        {
+            isslapping = true;
+            ani.SetBool("throw", true);
+            
+        }
       
         if (!player2.activeInHierarchy && Input.GetButtonDown ("startbuttonP2"))
         {
@@ -341,24 +348,47 @@ public class playerInput : MonoBehaviour {
     {
         if (other.gameObject.tag== "waterball" )
        {
+        if (PlaySound == false)
+            {
+                SoundController.instance.BalloonPickup();
+                PlaySound = true;
+            }
           print(other.gameObject.name);
          WBCOUNT += 6;
          Destroy(other.gameObject);
        }
+        if (isslapping == true && other.tag == "Enemy")
+        {
+            if (PlaySound ==  false)
+            {
+                if (p1)
+                {
+                    SoundController.instance.P1slap();
+                    PlaySound = true;
+                }
+                else
+                {
+                    SoundController.instance.P2slap();
+                    PlaySound = true;
+                }
+            }
+            other.GetComponent<BaseEnemy>().health -= 1;
+            isslapping = false;
+        }
     }
     void FixedUpdate()
         {
 
-        //testing if balloon count goes up after key is pressed
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log("R is being pressed");
-            SetCountText();
-        }
+        
 
 
         if (((Input.GetButtonDown("A_buttonP1")&& Input.GetAxis("verticalP1") == -1f || Input.GetKey(KeyCode.Space)) && p1 && jumping == false && !goingDown))
         {
+            if (PlaySound == false)
+            {
+                SoundController.instance.P1jump();
+                PlaySound = true;
+            }
             jumpPos.transform.position = new Vector2(transform.position.x, transform.position.y);
             // jump.Play();
 
@@ -368,6 +398,11 @@ public class playerInput : MonoBehaviour {
         }
         if ((Input.GetButtonDown("A_buttonP2") && Input.GetAxis("verticalP2")  == -1f  && !p1 && jumping == false && !goingDown))
         {
+            if (PlaySound == false)
+            {
+                SoundController.instance.P2jump();
+                PlaySound = true;
+            }
             jumpPos.transform.position = new Vector2(transform.position.x, transform.position.y);
             // jump.Play();
 
