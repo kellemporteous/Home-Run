@@ -78,6 +78,10 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP1"))
         {
             isslapping = true;
