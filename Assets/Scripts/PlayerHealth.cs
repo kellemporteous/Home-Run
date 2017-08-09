@@ -14,7 +14,8 @@ public class PlayerHealth : MonoBehaviour {
 	public float startTime;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         maxHealth = healthImages.Count;
         currentHealth = maxHealth;
         spawner = GameObject.FindGameObjectWithTag("spawner");
@@ -23,7 +24,10 @@ public class PlayerHealth : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        healthImages[currentHealth].SetActive(false);
+        if (currentHealth != 6)
+        {
+            healthImages[currentHealth].SetActive(false);
+        }
         if (currentHealth <= 0)
         {
 
