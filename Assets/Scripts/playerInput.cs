@@ -96,6 +96,7 @@ public class playerInput : MonoBehaviour {
             {
                 i.SetActive (true);
             }
+            player2.transform.position = new Vector2(player.transform.position.x + 1, player.transform.position.y + 1);
             player2.SetActive(true);
            
 
@@ -315,17 +316,17 @@ public class playerInput : MonoBehaviour {
         }
 
 
-        if ((Input.GetButtonDown("B_buttonP1") || Input.GetKeyDown(KeyCode.LeftControl) && WBCOUNT != 0 && p1))
+        if ((Input.GetButtonDown("B_buttonP1") || Input.GetKeyDown(KeyCode.LeftControl)) && WBCOUNT >= 1 && p1)
         {
             
             if (p1 && throwtimer <= 0)
             ani.SetTrigger("throw");
-            Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
+            Instantiate(balloonPrefab,player.transform.position, Quaternion.identity);
             balloonPrefab.GetComponent<ballonScript>().player = gameObject;
             WBCOUNT -= 1;
             throwtimer = 10;
         }
-        if (Input.GetButtonDown("B_buttonP2")  && WBCOUNT != 0 && !p1)
+        if (Input.GetButtonDown("B_buttonP2")  && WBCOUNT >= 0 && !p1)
         {
             if (!p1 && throwtimer <= 0)
             {
