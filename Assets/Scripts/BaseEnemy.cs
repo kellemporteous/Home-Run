@@ -27,7 +27,7 @@ public class BaseEnemy : MonoBehaviour
     public int numWaterBalloons;
     public float visionDistance;
     public float hitDistance;
-    public float targetDistance;
+    //public float targetDistance;
 
     //Variables needed for the cool down system
     public float coolDown;
@@ -38,6 +38,7 @@ public class BaseEnemy : MonoBehaviour
     //bools that change AI logic
     public bool isAttacking;
     public bool isSpecialActive;
+    public bool isSlapping;
 
     //Vector2 positions declared
     protected Vector2 newPosition;
@@ -93,10 +94,10 @@ public class BaseEnemy : MonoBehaviour
        
 
         // sets targetdistance to the distance bettween the player
-        targetDistance = Vector3.Distance(transform.position, player.transform.position);
+        //targetDistance = Vector3.Distance(transform.position, player.transform.position);
         //Setting The current Position
 
-        currentPosition = transform.position;
+        currentPosition = this.gameObject.transform.position;
 
         //Setting the max amount of water balloons held at one time
         if (numWaterBalloons >= 3)
@@ -170,18 +171,18 @@ public class BaseEnemy : MonoBehaviour
             positionY = Mathf.Clamp(positionY, -radiusY, radiusY);
         }
 
-        /*if (currentPosition == newPosition)
+        if (currentPosition == newPosition)
         {
             enemyState = EnemyState.Idle;
+            idleCounter += idleCounter;
         }
-        */
+    
     }
     //Function will only be called when eney state is set to attack
     void Attack()
     {
 
         // setting the player position to newPosition
-        newPosition = player.transform.position;
 
 
         //creating a random variable
@@ -206,7 +207,7 @@ public class BaseEnemy : MonoBehaviour
             }
 
             //move towards player
-            transform.position = Vector2.MoveTowards(currentPosition, newPosition, speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(currentPosition, player.transform.position, speed * Time.deltaTime);
         }
 
         //checking to see if isAttacking is true
@@ -214,7 +215,7 @@ public class BaseEnemy : MonoBehaviour
         {
 
                 //Move away from the player
-                transform.position = Vector2.MoveTowards(currentPosition, -newPosition, speed / 4 * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(currentPosition, -player.transform.position, speed / 4 * Time.deltaTime);
                 //Calling cool down function only when is attacking is false
 
             CoolDown();
@@ -240,10 +241,13 @@ public class BaseEnemy : MonoBehaviour
     public void Slap()
     {
         Debug.Log("Slap");
+        isSlapping = true;
         isAttacking = false;
         //EndOfSlap();
         //reset cool down
+        coolDownTimer = coolDown;
         animator.SetBool("throw", true);
+
     }
 
     public void EndOfSlap()
@@ -275,7 +279,7 @@ public class BaseEnemy : MonoBehaviour
         }
 
         // checking if count is higher than 3 and if AI is in correct state
-        if (count >= 2 && enemyState == EnemyState.Attack && targetDistance > 2)
+        if (count >= 2 && enemyState == EnemyState.Attack /*&& targetDistance > 2*/)
         {
             //if true change states
             enemyState = EnemyState.Special;
@@ -283,12 +287,12 @@ public class BaseEnemy : MonoBehaviour
         }
 
         // checking if two close to target to throw ballon
-        else if (targetDistance < 2)
+       /* else if (targetDistance < 2)
         {
             //if true change states
             enemyState = EnemyState.Attack;
             isSpecialActive = false;
-        }
+        }*/
     }
 
     //Function will control the direction the AI is facing
@@ -360,7 +364,7 @@ public class BaseEnemy : MonoBehaviour
         float playerDiff = player != null ? (player.transform.position - transform.position).magnitude : float.MaxValue; ;
 
         //checking if the AI can see the player
-        if (playerDiff <= visionDistance)
+        if (playerDiff < visionDistance)
         {
             //if seen then change states
             enemyState = EnemyState.Attack;
@@ -413,15 +417,19 @@ public class BaseEnemy : MonoBehaviour
         //checking if isAttacking is true
         if (isAttacking == true)
         {
+
+            if (isSlapping == true)
+            {
             //checking id collision was with player
             if (collision.gameObject.tag == "Player")
             {
                 Debug.Log("OH MY GEWD");
-                coolDownTimer = coolDown;
                 collision.gameObject.GetComponent<PlayerHealth>().currentHealth -= damage;
                 //if true, reduce the amount of health by damage
                // playerInfo.currentHealth = playerInfo.currentHealth - damage;
             }
+            }
+
         }
     }
 }
