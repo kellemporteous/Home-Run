@@ -20,6 +20,9 @@ public class playerInput : MonoBehaviour {
     public int count;
     public bool PlaySound = false;
 
+    public GameObject Join;
+ //   public GameObject Canvas2;
+
     public bool goingDown;      //wink wink
     public float jumpheight;   //height to jump
     public AudioSource jump;
@@ -97,6 +100,7 @@ public class playerInput : MonoBehaviour {
                 i.SetActive (true);
             }
             player2.transform.position = new Vector2(player.transform.position.x + 1, player.transform.position.y + 1);
+            Join.SetActive(false);
             player2.SetActive(true);
            
 
