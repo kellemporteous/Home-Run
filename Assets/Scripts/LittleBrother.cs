@@ -59,6 +59,7 @@ public class LittleBrother : MonoBehaviour {
             float diff = (target.transform.position - transform.position).magnitude;
             if (diff < distance)
             {
+               
                 closestTarget = target;
                 distance = diff;
             }
@@ -69,12 +70,17 @@ public class LittleBrother : MonoBehaviour {
                 Vector3 delta = transform.position - target.transform.position;
                 //set the distance to 1 unit
                 delta.Normalize();
+                if (gameObject.transform.position.x < target.transform.position.x + 1 || gameObject.transform.position.x > target.transform.position.x + 1)
+                {
+                 gameObject.GetComponent<SpriteRenderer>().flipX = target.GetComponent<SpriteRenderer>().flipX;
 
+                }
+               
                 //The AI will move towards the target
                 transform.position = Vector2.MoveTowards(transform.position, target.transform.position + delta * offset, speed * Time.deltaTime);
             }
         }
-
+      
     }
 
     void AILogic()
