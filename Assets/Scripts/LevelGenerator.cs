@@ -8,7 +8,7 @@ public class LevelGenerator : MonoBehaviour {
 
     public GameObject[] enemiesToSpawn;
     public Transform[] enemySpawnPoints;
-
+    public GameObject[] enemyspawnpointobjs;
     public GameObject balloonPickUp;
     public Transform[] itemSpawnArea;
 
@@ -28,14 +28,18 @@ public class LevelGenerator : MonoBehaviour {
         }
         Instantiate(player, startPoint.transform.position, Quaternion.Euler(0, 0, 0));
 
-       
 
-      
+     
+
     }
 
     void EnemySpawn()
     {
        
+        enemyspawnpointobjs = GameObject.FindGameObjectsWithTag("enemySpawnPoint");
+        enemySpawnPoints = new Transform[enemyspawnpointobjs.Length];
+        for (int i = 0; i < enemyspawnpointobjs.Length; ++i)
+            enemySpawnPoints[i] = enemyspawnpointobjs[i].transform;
 
         foreach (Transform spawnPoint in enemySpawnPoints)
         {
