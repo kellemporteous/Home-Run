@@ -14,6 +14,7 @@ public class playerInput : MonoBehaviour {
     public float jumpSpeed;
     public float startjumpspeed;
     public Rigidbody2D playerRB;
+    public GameObject spawncube;
     // public float amountToMove;    // 
 
     public Text countText;
@@ -100,6 +101,7 @@ public class playerInput : MonoBehaviour {
                 i.SetActive (true);
             }
             player2.transform.position = new Vector2(player.transform.position.x + 1, player.transform.position.y + 1);
+            spawncube.transform.position = player.transform.position;
             Join.SetActive(false);
             player2.SetActive(true);
            
