@@ -220,6 +220,7 @@ public class BaseEnemy : MonoBehaviour
                     if (PlaySound == false)
                     {
                         SoundController.instance.EnemySlap();
+                        PlaySound = true;
                     }
                     Slap();
 
@@ -237,7 +238,7 @@ public class BaseEnemy : MonoBehaviour
                 //Move away from the player
                 transform.position = Vector2.MoveTowards(currentPosition, currentPosition - toPlayer, speed / 2 * Time.deltaTime);
                 //Calling cool down function only when is attacking is false
-
+                PlaySound = false;
                 CoolDown();
             }
 

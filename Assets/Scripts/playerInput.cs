@@ -385,6 +385,7 @@ public class playerInput : MonoBehaviour {
             }
             other.GetComponent<BaseEnemy>().health -= 1;
             isslapping = false;
+            PlaySound = false;
         }
     }
     void FixedUpdate()
@@ -430,6 +431,7 @@ public class playerInput : MonoBehaviour {
             {
                 gameObject.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, -jumpSpeed ));
                 goingDown = true;
+                PlaySound = false;
                
             }
 
@@ -441,7 +443,7 @@ public class playerInput : MonoBehaviour {
             {
                 gameObject.GetComponent<Rigidbody2D>().velocity = (new Vector2(0, -jumpSpeed));
                 goingDown = true;
-
+                PlaySound = false;
             }
 
 
