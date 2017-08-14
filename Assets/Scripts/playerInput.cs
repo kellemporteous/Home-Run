@@ -82,26 +82,40 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
+        if (!player2.activeInHierarchy)
+        {
+            spawncube.transform.position = new Vector2(player.transform.position.x, player.transform.position.y);
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
-        if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP1"))
+        if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP1") && p1)
         {
             isslapping = true;
             ani.SetBool("throw", true);
             
         }
-      
+        if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP2") && !p1)
+        {
+            isslapping = true;
+            ani.SetBool("throw", true);
+
+        }
+
+
+
         if (!player2.activeInHierarchy && Input.GetButtonDown ("startbuttonP2"))
         {
-         
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().twoplayerObj = spawncube;
             foreach (GameObject i in p2infoobjs)
             {
                 i.SetActive (true);
             }
             player2.transform.position = new Vector2(player.transform.position.x + 1, player.transform.position.y + 1);
-            spawncube.transform.position = player.transform.position;
+           
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().twoplayerObj = spawncube;
             Join.SetActive(false);
             player2.SetActive(true);
            

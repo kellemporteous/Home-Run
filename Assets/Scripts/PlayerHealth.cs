@@ -12,7 +12,7 @@ public class PlayerHealth : MonoBehaviour {
     public int damage;
     public GameObject spawner;
 	public float startTime;
-
+    public GameObject player2;
 	// Use this for initialization
 	void Start ()
     {
@@ -24,6 +24,8 @@ public class PlayerHealth : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+       
+
         if (currentHealth != 6)
         {
             healthImages[currentHealth].SetActive(false);
