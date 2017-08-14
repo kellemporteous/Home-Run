@@ -28,6 +28,14 @@ public class PlayerHealth : MonoBehaviour {
         {
             healthImages[currentHealth].SetActive(false);
         }
+
+        if (currentHealth == 6)
+        {
+            foreach (GameObject i in healthImages)
+                i.SetActive(true);
+        }
+            
+
         if (currentHealth <= 0)
         {
 
