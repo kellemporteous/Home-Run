@@ -10,11 +10,14 @@ public class CameraScript : MonoBehaviour
     public GameObject player;
     public GameObject player2;
     public GameObject twoplayerObj;
+    public GameObject popup;
+    public bool canplay;
+    
     // Use this for initialization
     void Start ()
     {
         cameraOBJ = GameObject.FindGameObjectWithTag("MainCamera");
-       
+        canplay = true;
 
     }
 	
@@ -28,5 +31,11 @@ public class CameraScript : MonoBehaviour
         move.y = cameraOBJ.transform.position.y;
         move.z = cameraOBJ.transform.position.z;
         cameraOBJ.transform.position = move;
+
+        if (transform.position.x <= player.transform.position.x + 6 && canplay)
+        {
+            popup.GetComponent<Animator>().SetBool ("play",true);
+            canplay = false;
+        }
     }
 }

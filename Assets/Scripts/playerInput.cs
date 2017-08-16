@@ -49,7 +49,8 @@ public class playerInput : MonoBehaviour {
     public Text wbcounter;
     public bool iswalking;
     public bool isslapping;
-    
+
+    public bool popup;
 
     // Use this for initialization
     void Start()
@@ -82,285 +83,296 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
-        if (!player2.activeInHierarchy)
-        {
-            spawncube.transform.position = new Vector2(player.transform.position.x, player.transform.position.y);
-        }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (popup)
         {
-            Application.Quit();
-        }
-        if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP1") && p1)
-        {
-            isslapping = true;
-            ani.SetBool("throw", true);
-            
-        }
-        if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP2") && !p1)
-        {
-            isslapping = true;
-            ani.SetBool("throw", true);
-
-        }
-
-
-
-        if (!player2.activeInHierarchy && Input.GetButtonDown ("startbuttonP2"))
-        {
-            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().twoplayerObj = spawncube;
-            foreach (GameObject i in p2infoobjs)
+            if (Input.GetButtonDown("A_buttonP1"))
             {
-                i.SetActive (true);
-            }
-            player2.transform.position = new Vector2(player.transform.position.x + 1, player.transform.position.y + 1);
-           
-            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().twoplayerObj = spawncube;
-            Join.SetActive(false);
-            player2.SetActive(true);
-           
-
-        }
-
-        string wbcountstring = WBCOUNT.ToString();
-        wbcounter.text = wbcountstring;
-
-        throwtimer -= 1;    
-                  
-
-        if (runtimer)
-        {
-            timertime -= Time.deltaTime * 10;
-        }
-        if (notrunning)
-        {
-            speed = walkspeed;
-            ani.SetBool("isrunning", false);
-        }
-        if (!notrunning)
-        {
-            ani.SetBool("isrunning", true);
-            speed = runspeed;
-        }
-
-
-        if ((Input.GetAxis("horizontalP1") == 0f)&& p1)
-        {
-            ani.SetBool("iswalking", false);
-
-            if (runtimer && notrunning)
-                notrunning = false;
-
-        }
-        if ((Input.GetAxis("horizontalP2") == 0f) && !p1)
-        {
-            ani.SetBool("iswalking", false);
-
-            if (runtimer && notrunning)
-                notrunning = false;
-
-        }
-
-
-
-        if ((Input.GetAxis("horizontalP1") == 0f && !notrunning))
-        {
-            if (timertime <= 1)
-            {
-               
-                gameObject.GetComponent<audioMng>().iswalking = false;
-                
-                runtimer = false;
-                timertime = 0;
-                notrunning = true;
-                
+                popup = false;
             }
         }
 
-        if (Input.GetAxis("verticalP1") ==  0f)
+        if (!popup)
         {
-            
-
-                gameObject.GetComponent<audioMng>().iswalking = false;
-            
-        }
-
-
-                if (((Input.GetAxis("horizontalP1") == -1f || Input.GetKey (KeyCode.RightArrow)) && p1 && transform.position.x <= right.position.x))
-        {
-
-            gameObject.GetComponent<audioMng>().iswalking = true;
-            if (p1)
+            if (!player2.activeInHierarchy)
             {
-                transform.position = new Vector2(transform.position.x + speed / 100, transform.position.y);
-            }
-            thisspriterenderer.flipX = false;
-            if (!runtimer && notrunning)
-            {
-                runtimer = true;
-                timertime = runtimerintial;
-                ani.SetBool("iswalking", true);
+                spawncube.transform.position = new Vector2(player.transform.position.x, player.transform.position.y);
             }
 
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
+            if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP1") && p1)
+            {
+                isslapping = true;
+                ani.SetBool("throw", true);
+
+            }
+            if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP2") && !p1)
+            {
+                isslapping = true;
+                ani.SetBool("throw", true);
+
+            }
+
+
+
+            if (!player2.activeInHierarchy && Input.GetButtonDown("startbuttonP2"))
+            {
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().twoplayerObj = spawncube;
+                foreach (GameObject i in p2infoobjs)
+                {
+                    i.SetActive(true);
+                }
+                player2.transform.position = new Vector2(player.transform.position.x + 1, player.transform.position.y + 1);
+
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().twoplayerObj = spawncube;
+                Join.SetActive(false);
+                player2.SetActive(true);
+
+
+            }
+
+            string wbcountstring = WBCOUNT.ToString();
+            wbcounter.text = wbcountstring;
+
+            throwtimer -= 1;
+
+
+            if (runtimer)
+            {
+                timertime -= Time.deltaTime * 10;
+            }
+            if (notrunning)
+            {
+                speed = walkspeed;
+                ani.SetBool("isrunning", false);
+            }
             if (!notrunning)
-
             {
-
-
-                timertime = runtimerintial;
-            }
-           
-        }
-       
-        if ((Input.GetAxis("horizontalP2") == -1f  && !p1))
-        {
-            gameObject.GetComponent<audioMng>().iswalking = true;
-            if (!p1)
-            {
-                player2.transform.position = new Vector2(player2.transform.position.x + speed / 100,transform.position.y);
-            }
-            thisspriterenderer.flipX = false;
-            if (!runtimer && notrunning)
-            {
-                runtimer = true;
-                timertime = runtimerintial;
-                ani.SetBool("iswalking", true);
+                ani.SetBool("isrunning", true);
+                speed = runspeed;
             }
 
 
-
-           
-           
-        }
-
-        if (((Input.GetAxis("horizontalP1") == 1f || Input.GetKey(KeyCode.LeftArrow)) && p1 && transform.position.x >= left.position.x))
-        {
-            gameObject.GetComponent<audioMng>().iswalking = true;
-            thisspriterenderer.flipX = true;
-            if (!runtimer && notrunning)
+            if ((Input.GetAxis("horizontalP1") == 0f) && p1)
             {
-                runtimer = true;
-                timertime = runtimerintial;
-                ani.SetBool("iswalking", true);
+                ani.SetBool("iswalking", false);
+
+                if (runtimer && notrunning)
+                    notrunning = false;
+
             }
-
-            if (p1)
-                transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
-            if (!p1)
-                transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
-        }
-
-        if ((Input.GetAxis("horizontalP2") == 1f && !p1 && transform.position.x >= left.position.x))
-        {
-            gameObject.GetComponent<audioMng>().iswalking = true;
-            thisspriterenderer.flipX = true;
-            if (!runtimer && notrunning)
+            if ((Input.GetAxis("horizontalP2") == 0f) && !p1)
             {
-                runtimer = true;
-                timertime = runtimerintial;
-                ani.SetBool("iswalking", true);
-            }
+                ani.SetBool("iswalking", false);
 
-           
-            if (!p1)
+                if (runtimer && notrunning)
+                    notrunning = false;
 
-                transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
-        }
-
-        if (((Input.GetAxis("verticalP1") == -1f || Input.GetKey(KeyCode.UpArrow)) && p1 && transform.position.y <= up.position.y))
-        {
-            gameObject.GetComponent<audioMng>().iswalking = true;
-            if (!runtimer && notrunning)
-            {
-               // runtimer = true;
-                timertime = runtimerintial;
-                ani.SetBool("iswalking", true);
             }
 
 
-            if (p1)
-                transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
-            if (!p1)
 
-                transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
-        }
-
-        if ((Input.GetAxis("verticalP2") == -1f && !p1 && transform.position.y <= up.position.y))
-        {
-            gameObject.GetComponent<audioMng>().iswalking = true;
-            if (!runtimer && notrunning)
+            if ((Input.GetAxis("horizontalP1") == 0f && !notrunning))
             {
-                runtimer = true;
-                timertime = runtimerintial;
-                ani.SetBool("iswalking", true);
+                if (timertime <= 1)
+                {
+
+                    gameObject.GetComponent<audioMng>().iswalking = false;
+
+                    runtimer = false;
+                    timertime = 0;
+                    notrunning = true;
+
+                }
+            }
+
+            if (Input.GetAxis("verticalP1") == 0f)
+            {
+
+
+                gameObject.GetComponent<audioMng>().iswalking = false;
+
             }
 
 
-            if (p1)
-                transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
-            if (!p1)
-
-                transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
-        }
-
-
-        if (((Input.GetAxis("verticalP1") == 1f || Input.GetKey(KeyCode.DownArrow)) && p1 && transform.position.y >= down.position.y))
-        {
-            gameObject.GetComponent<audioMng>().iswalking = true;
-            if (!runtimer && notrunning)
+            if (((Input.GetAxis("horizontalP1") == -1f || Input.GetKey(KeyCode.RightArrow)) && p1 && transform.position.x <= right.position.x))
             {
-                runtimer = true;
-                timertime = runtimerintial;
-                ani.SetBool("iswalking", true);
-            }
-            if (p1)
-                transform.position = new Vector2 (transform.position.x, transform.position.y - speed / 200);
-            if(!p1)
 
-               transform.position = new Vector2(transform.position.x, transform.position.y - speed / 200);
-        }
-        if ((Input.GetAxis("verticalP2") == 1f && !p1 && transform.position.y >= down.position.y))
-        {
-            gameObject.GetComponent<audioMng>().iswalking = true;
-            if (!runtimer && notrunning)
-            {
-                runtimer = true;
-                timertime = runtimerintial;
-                ani.SetBool("iswalking", true);
+                gameObject.GetComponent<audioMng>().iswalking = true;
+                if (p1)
+                {
+                    transform.position = new Vector2(transform.position.x + speed / 100, transform.position.y);
+                }
+                thisspriterenderer.flipX = false;
+                if (!runtimer && notrunning)
+                {
+                    runtimer = true;
+                    timertime = runtimerintial;
+                    ani.SetBool("iswalking", true);
+                }
+
+                if (!notrunning)
+
+                {
+
+
+                    timertime = runtimerintial;
+                }
+
             }
-            
-               
-            if (!p1)
+
+            if ((Input.GetAxis("horizontalP2") == -1f && !p1))
+            {
+                gameObject.GetComponent<audioMng>().iswalking = true;
+                if (!p1)
+                {
+                    player2.transform.position = new Vector2(player2.transform.position.x + speed / 100, transform.position.y);
+                }
+                thisspriterenderer.flipX = false;
+                if (!runtimer && notrunning)
+                {
+                    runtimer = true;
+                    timertime = runtimerintial;
+                    ani.SetBool("iswalking", true);
+                }
+
+
+
+
+
+            }
+
+            if (((Input.GetAxis("horizontalP1") == 1f || Input.GetKey(KeyCode.LeftArrow)) && p1 && transform.position.x >= left.position.x))
+            {
+                gameObject.GetComponent<audioMng>().iswalking = true;
+                thisspriterenderer.flipX = true;
+                if (!runtimer && notrunning)
+                {
+                    runtimer = true;
+                    timertime = runtimerintial;
+                    ani.SetBool("iswalking", true);
+                }
+
+                if (p1)
+                    transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
+                if (!p1)
+                    transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
+            }
+
+            if ((Input.GetAxis("horizontalP2") == 1f && !p1 && transform.position.x >= left.position.x))
+            {
+                gameObject.GetComponent<audioMng>().iswalking = true;
+                thisspriterenderer.flipX = true;
+                if (!runtimer && notrunning)
+                {
+                    runtimer = true;
+                    timertime = runtimerintial;
+                    ani.SetBool("iswalking", true);
+                }
+
+
+                if (!p1)
+
+                    transform.position = new Vector2(transform.position.x - (speed - 1) / 100, transform.position.y);
+            }
+
+            if (((Input.GetAxis("verticalP1") == -1f || Input.GetKey(KeyCode.UpArrow)) && p1 && transform.position.y <= up.position.y))
+            {
+                gameObject.GetComponent<audioMng>().iswalking = true;
+                if (!runtimer && notrunning)
+                {
+                    // runtimer = true;
+                    timertime = runtimerintial;
+                    ani.SetBool("iswalking", true);
+                }
+
+
+                if (p1)
+                    transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
+                if (!p1)
+
+                    transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
+            }
+
+            if ((Input.GetAxis("verticalP2") == -1f && !p1 && transform.position.y <= up.position.y))
+            {
+                gameObject.GetComponent<audioMng>().iswalking = true;
+                if (!runtimer && notrunning)
+                {
+                    runtimer = true;
+                    timertime = runtimerintial;
+                    ani.SetBool("iswalking", true);
+                }
+
+
+                if (p1)
+                    transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
+                if (!p1)
+
+                    transform.position = new Vector2(transform.position.x, transform.position.y + speed / 200);
+            }
+
+
+            if (((Input.GetAxis("verticalP1") == 1f || Input.GetKey(KeyCode.DownArrow)) && p1 && transform.position.y >= down.position.y))
+            {
+                gameObject.GetComponent<audioMng>().iswalking = true;
+                if (!runtimer && notrunning)
+                {
+                    runtimer = true;
+                    timertime = runtimerintial;
+                    ani.SetBool("iswalking", true);
+                }
+                if (p1)
+                    transform.position = new Vector2(transform.position.x, transform.position.y - speed / 200);
+                if (!p1)
 
                     transform.position = new Vector2(transform.position.x, transform.position.y - speed / 200);
-        }
-
-
-        if ((Input.GetButtonDown("B_buttonP1") || Input.GetKeyDown(KeyCode.LeftControl)) && WBCOUNT >= 1 && p1)
-        {
-            
-            if (p1 && throwtimer <= 0)
-            ani.SetTrigger("throw");
-            Instantiate(balloonPrefab,player.transform.position, Quaternion.identity);
-            balloonPrefab.GetComponent<ballonScript>().player = gameObject;
-            WBCOUNT -= 1;
-            throwtimer = 10;
-        }
-        if (Input.GetButtonDown("B_buttonP2")  && WBCOUNT >= 0 && !p1)
-        {
-            if (!p1 && throwtimer <= 0)
+            }
+            if ((Input.GetAxis("verticalP2") == 1f && !p1 && transform.position.y >= down.position.y))
             {
-                ani.SetTrigger("throw");
-                Instantiate(balloonPrefab, transform.position, Quaternion.identity);
+                gameObject.GetComponent<audioMng>().iswalking = true;
+                if (!runtimer && notrunning)
+                {
+                    runtimer = true;
+                    timertime = runtimerintial;
+                    ani.SetBool("iswalking", true);
+                }
+
+
+                if (!p1)
+
+                    transform.position = new Vector2(transform.position.x, transform.position.y - speed / 200);
+            }
+
+
+            if ((Input.GetButtonDown("B_buttonP1") || Input.GetKeyDown(KeyCode.LeftControl)) && WBCOUNT >= 1 && p1)
+            {
+
+                if (p1 && throwtimer <= 0)
+                    ani.SetTrigger("throw");
+                Instantiate(balloonPrefab, player.transform.position, Quaternion.identity);
                 balloonPrefab.GetComponent<ballonScript>().player = gameObject;
                 WBCOUNT -= 1;
                 throwtimer = 10;
             }
-        }
+            if (Input.GetButtonDown("B_buttonP2") && WBCOUNT >= 0 && !p1)
+            {
+                if (!p1 && throwtimer <= 0)
+                {
+                    ani.SetTrigger("throw");
+                    Instantiate(balloonPrefab, transform.position, Quaternion.identity);
+                    balloonPrefab.GetComponent<ballonScript>().player = gameObject;
+                    WBCOUNT -= 1;
+                    throwtimer = 10;
+                }
+            }
 
 
 
-
+    }
 
     }
     //Counts when player collects ballons, but doesn't exceed the limit set
