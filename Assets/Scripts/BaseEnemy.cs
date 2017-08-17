@@ -54,6 +54,7 @@ public class BaseEnemy : MonoBehaviour
     protected PlayerHealth playerInfo;
 
     public Animator animator;
+    public bool cantmove;
 
     //Public enum that holds the different states
     public enum EnemyState
@@ -96,8 +97,14 @@ public class BaseEnemy : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
-       
 
+        cantmove = player.GetComponent<playerInput>().popup;
+        if (cantmove)
+        {
+            enemyState = EnemyState.Idle;
+            animator.SetBool("iswalking", false);
+            animator.SetBool("isrunning", false);
+        }
         // sets targetdistance to the distance bettween the player
         //targetDistance = Vector3.Distance(transform.position, player.transform.position);
         //Setting The current Position
@@ -130,15 +137,17 @@ public class BaseEnemy : MonoBehaviour
     }
 
     void Idle()
-    {
-        if (idleCounter > 0)
+    {if (!cantmove)
         {
-            idleCounter -= Time.deltaTime;
-        }
+            if (idleCounter > 0)
+            {
+                idleCounter -= Time.deltaTime;
+            }
 
-        if (idleCounter <= 0)
-        {
-            enemyState = EnemyState.Walk;
+            if (idleCounter <= 0)
+            {
+                enemyState = EnemyState.Walk;
+            }
         }
     }
 
@@ -146,112 +155,115 @@ public class BaseEnemy : MonoBehaviour
 
     void Walk()
     {
-        //checking if tChnage has been reached
-        if (Time.time >= tChange)
+        if (!cantmove)
         {
-            //Picking a random X and Y position bewteen the radius
-            positionX = Random.Range(-radiusX, radiusX);
-            positionY = Random.Range(-radiusY, radiusY);
+            //checking if tChnage has been reached
+            if (Time.time >= tChange)
+            {
+                //Picking a random X and Y position bewteen the radius
+                positionX = Random.Range(-radiusX, radiusX);
+                positionY = Random.Range(-radiusY, radiusY);
 
-            //reassigning a new value to tChange
-            tChange = Time.time + Random.Range(1.0f, 3.0f);
+                //reassigning a new value to tChange
+                tChange = Time.time + Random.Range(1.0f, 3.0f);
 
-            //setting the new X and Y positions to newPosition
-            newPosition = new Vector2(positionX, positionY) + startPosition;
+                //setting the new X and Y positions to newPosition
+                newPosition = new Vector2(positionX, positionY) + startPosition;
+            }
+
+            //Move towards new position
+            transform.position = Vector2.MoveTowards(currentPosition, newPosition, speed * Time.deltaTime);
+
+            //NOTE: This is a fail safe to make sure the enemies do not move outside of the patrol area
+            // Clamp the X position between the radius
+            if (positionX >= radiusX || positionX <= -radiusX)
+            {
+                positionX = Mathf.Clamp(positionX, -radiusX, radiusX);
+            }
+
+            // Clamp the Y position between the radius
+            if (positionY >= radiusY || positionY <= -radiusY)
+            {
+                positionY = Mathf.Clamp(positionY, -radiusY, radiusY);
+            }
+
+            if (currentPosition == newPosition)
+            {
+                enemyState = EnemyState.Idle;
+                idleCounter += idleCounter;
+            }
         }
-
-        //Move towards new position
-        transform.position = Vector2.MoveTowards(currentPosition, newPosition, speed * Time.deltaTime);
-
-        //NOTE: This is a fail safe to make sure the enemies do not move outside of the patrol area
-        // Clamp the X position between the radius
-        if (positionX >= radiusX || positionX <= -radiusX)
-        {
-            positionX = Mathf.Clamp(positionX, -radiusX, radiusX);
-        }
-
-        // Clamp the Y position between the radius
-        if (positionY >= radiusY || positionY <= -radiusY)
-        {
-            positionY = Mathf.Clamp(positionY, -radiusY, radiusY);
-        }
-
-        if (currentPosition == newPosition)
-        {
-            enemyState = EnemyState.Idle;
-            idleCounter += idleCounter;
-        }
-    
     }
     //Function will only be called when eney state is set to attack
     void Attack()
     {
-
-        // setting the player position to newPosition
-        List<GameObject> players = GameObject.FindGameObjectsWithTag("Player").ToList();
-        GameObject closestTarget;
-        float distance = Mathf.Infinity;
-
-
-        foreach (GameObject target in players)
+        if (!cantmove)
         {
-            //creating a random variable
-            float canThrow = Random.Range(0, 100);
+            // setting the player position to newPosition
+            List<GameObject> players = GameObject.FindGameObjectsWithTag("Player").ToList();
+            GameObject closestTarget;
+            float distance = Mathf.Infinity;
 
 
-            //getting the distance from the player to the AI
-            float playerDiff = target != null ? (target.transform.position - transform.position).magnitude : float.MaxValue; ;
-
-            if (playerDiff < distance)
+            foreach (GameObject target in players)
             {
-                closestTarget = target;
-                distance = playerDiff;
-            }
-
-            //checking to see if isAttacking is true
-            if (isAttacking == true)
-            {
+                //creating a random variable
+                float canThrow = Random.Range(0, 100);
 
 
-                //checking if Ai is within hit distance
-                if (playerDiff <= hitDistance)
+                //getting the distance from the player to the AI
+                float playerDiff = target != null ? (target.transform.position - transform.position).magnitude : float.MaxValue; ;
+
+                if (playerDiff < distance)
                 {
-                    //call this function
-                    if (PlaySound == false)
-                    {
-                        SoundController.instance.EnemySlap();
-                        PlaySound = true;
-                    }
-                    Slap();
-
-
+                    closestTarget = target;
+                    distance = playerDiff;
                 }
 
-                //move towards player
-                transform.position = Vector2.MoveTowards(currentPosition, target.transform.position, speed * Time.deltaTime);
-            }
+                //checking to see if isAttacking is true
+                if (isAttacking == true)
+                {
 
-            //checking to see if isAttacking is true
-            else if (isAttacking == false)
-            {
-                Vector2 toPlayer = (target.transform.position - transform.position).normalized; toPlayer.y = 0;
-                //Move away from the player
-                transform.position = Vector2.MoveTowards(currentPosition, currentPosition - toPlayer, speed / 2 * Time.deltaTime);
-                //Calling cool down function only when is attacking is false
-                PlaySound = false;
-                CoolDown();
-            }
 
-            //checking to see if AI is able to throw a water balloon
-            if (canThrow >= 50 && playerDiff >= hitDistance && numWaterBalloons > 0)
-            {
-                //spawn water balloon
-                Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
-                //decrease the number of water balloons being held
-                numWaterBalloons -= 1;
+                    //checking if Ai is within hit distance
+                    if (playerDiff <= hitDistance && coolDownTimer <= 0)
+                    {
+                        //call this function
+                        if (PlaySound == false)
+                        {
+                            SoundController.instance.EnemySlap();
+                            PlaySound = true;
+                        }
+                        Slap();
+
+
+                    }
+
+                    //move towards player
+                    transform.position = Vector2.MoveTowards(currentPosition, target.transform.position, speed * Time.deltaTime);
+                }
+
+                //checking to see if isAttacking is true
+                else if (isAttacking == false)
+                {
+                    Vector2 toPlayer = (target.transform.position - transform.position).normalized; toPlayer.y = 0;
+                    //Move away from the player
+                    transform.position = Vector2.MoveTowards(currentPosition, currentPosition - toPlayer, speed / 2 * Time.deltaTime);
+                    //Calling cool down function only when is attacking is false
+                    PlaySound = false;
+                    CoolDown();
+                }
+
+                //checking to see if AI is able to throw a water balloon
+                if (canThrow >= 50 && playerDiff >= hitDistance && numWaterBalloons > 0)
+                {
+                    //spawn water balloon
+                    Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
+                    //decrease the number of water balloons being held
+                    numWaterBalloons -= 1;
+                }
             }
         }
-
     }
 
     //Function will only be called when enemy state is set to special, use will chnage depending on the child in heriting
@@ -263,13 +275,15 @@ public class BaseEnemy : MonoBehaviour
     //Function that controls when AI tries to hit the player, use will chnage depending on the child in heriting
     public void Slap()
     {
-        Debug.Log("Slap");
-        isSlapping = true;
-        //EndOfSlap();
-        //reset cool down
-        coolDownTimer = coolDown;
-        animator.SetBool("throw", true);
-
+        if (!cantmove)
+        {
+            Debug.Log("Slap");
+            isSlapping = true;
+            //EndOfSlap();
+            //reset cool down
+            coolDownTimer = coolDown;
+            animator.SetBool("throw", true);
+        }
     }
 
     public void EndOfSlap()
@@ -447,7 +461,7 @@ public class BaseEnemy : MonoBehaviour
             {
                 Debug.Log("OH MY GEWD");
                 collision.gameObject.GetComponent<PlayerHealth>().currentHealth -= damage;
-                    isAttacking = false;
+                   // isAttacking = false;
 
                     //if true, reduce the amount of health by damage
                     // playerInfo.currentHealth = playerInfo.currentHealth - damage;
