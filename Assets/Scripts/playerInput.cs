@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class playerInput : MonoBehaviour {
     public float speed;
@@ -51,11 +53,13 @@ public class playerInput : MonoBehaviour {
     public bool isslapping;
 
     public bool popup;
-
+    public bool firstwb;
+    public bool firstwbani;
+    public GameObject wbpopup;
     // Use this for initialization
     void Start()
     {
-        
+        firstwb = true;
         thisspriterenderer = gameObject.GetComponent<SpriteRenderer>();
         ani = gameObject.GetComponent<Animator>();
         playerRB = this.gameObject.GetComponent<Rigidbody2D>();
@@ -83,6 +87,10 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
+        if (firstwbani)
+        {
+            wbpopup.GetComponent<Animator>().SetBool("play", true);
+        }
 
         if (popup)
         {
@@ -383,8 +391,17 @@ public class playerInput : MonoBehaviour {
 
   public void  OnTriggerEnter2D(Collider2D other)
     {
+        if (other.gameObject.tag == "home")
+        {
+            SceneManager.LoadScene("Menu");
+        }
         if (other.gameObject.tag== "waterball" )
        {
+            if (firstwb)
+            {
+                popup = true;
+                firstwbani = true;
+            }
         if (PlaySound == false)
             {
                 SoundController.instance.BalloonPickup();
