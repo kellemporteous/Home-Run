@@ -78,7 +78,7 @@ public class playerInput : MonoBehaviour {
 
         }
         count = 0;
-       
+      
     }
 
 
@@ -87,15 +87,24 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
+        
+        if (wbpopup.GetComponent<Animator>().GetBool ("wbpop") == true && Input.GetButtonDown("A_buttonP1"))
+        {
+            firstwb = false;
+            wbpopup.GetComponent<Animator>().SetBool("wbpop", false);
+        }
         if (firstwbani)
         {
-            wbpopup.GetComponent<Animator>().SetBool("play", true);
+           // wbpopup.GetComponent<Animator>().SetBool("play", true);
         }
 
         if (popup)
         {
             if (Input.GetButtonDown("A_buttonP1"))
             {
+
+                GameObject cameramain = GameObject.FindGameObjectWithTag("popup1");
+                cameramain.GetComponent<Animator>().SetBool("play", false);
                 popup = false;
             }
         }
@@ -397,10 +406,16 @@ public class playerInput : MonoBehaviour {
         }
         if (other.gameObject.tag== "waterball" )
        {
-            if (firstwb)
+            if (firstwb == true)
             {
                 popup = true;
                 firstwbani = true;
+                if (firstwbani)
+                {
+                    wbpopup.GetComponent<Animator>().SetBool("wbpop", true);
+                }
+                firstwbani = false;
+                   
             }
         if (PlaySound == false)
             {
