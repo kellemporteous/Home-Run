@@ -54,7 +54,6 @@ public class BaseEnemy : MonoBehaviour
     protected PlayerHealth playerInfo;
 
     public Animator animator;
-    public bool cantmove;
 
     //Public enum that holds the different states
     public enum EnemyState
@@ -98,13 +97,7 @@ public class BaseEnemy : MonoBehaviour
     public virtual void Update()
     {
 
-        cantmove = player.GetComponent<playerInput>().popup;
-        if (cantmove)
-        {
-            enemyState = EnemyState.Idle;
-            animator.SetBool("iswalking", false);
-            animator.SetBool("isrunning", false);
-        }
+
         // sets targetdistance to the distance bettween the player
         //targetDistance = Vector3.Distance(transform.position, player.transform.position);
         //Setting The current Position
@@ -123,7 +116,7 @@ public class BaseEnemy : MonoBehaviour
         }
 
         //functions that need to be called every update
-     //   ScanForFriends();
+        //   ScanForFriends();
         EnemyBehaviour();
         EnemyLogic();
         FacingDirection();
@@ -137,17 +130,15 @@ public class BaseEnemy : MonoBehaviour
     }
 
     void Idle()
-    {if (!cantmove)
+    {
+        if (idleCounter > 0)
         {
-            if (idleCounter > 0)
-            {
-                idleCounter -= Time.deltaTime;
-            }
+            idleCounter -= Time.deltaTime;
+        }
 
-            if (idleCounter <= 0)
-            {
-                enemyState = EnemyState.Walk;
-            }
+        if (idleCounter <= 0)
+        {
+            enemyState = EnemyState.Walk;
         }
     }
 
@@ -155,135 +146,130 @@ public class BaseEnemy : MonoBehaviour
 
     void Walk()
     {
-        if (!cantmove)
+        //checking if tChnage has been reached
+        if (Time.time >= tChange)
         {
-            //checking if tChnage has been reached
-            if (Time.time >= tChange)
-            {
-                //Picking a random X and Y position bewteen the radius
-                positionX = Random.Range(-radiusX, radiusX);
-                positionY = Random.Range(-radiusY, radiusY);
+            //Picking a random X and Y position bewteen the radius
+            positionX = Random.Range(-radiusX, radiusX);
+            positionY = Random.Range(-radiusY, radiusY);
 
-                //reassigning a new value to tChange
-                tChange = Time.time + Random.Range(1.0f, 3.0f);
+            //reassigning a new value to tChange
+            tChange = Time.time + Random.Range(1.0f, 3.0f);
 
-                //setting the new X and Y positions to newPosition
-                newPosition = new Vector2(positionX, positionY) + startPosition;
-            }
-
-            //Move towards new position
-            transform.position = Vector2.MoveTowards(currentPosition, newPosition, speed * Time.deltaTime);
-
-            //NOTE: This is a fail safe to make sure the enemies do not move outside of the patrol area
-            // Clamp the X position between the radius
-            if (positionX >= radiusX || positionX <= -radiusX)
-            {
-                positionX = Mathf.Clamp(positionX, -radiusX, radiusX);
-            }
-
-            // Clamp the Y position between the radius
-            if (positionY >= radiusY || positionY <= -radiusY)
-            {
-                positionY = Mathf.Clamp(positionY, -radiusY, radiusY);
-            }
-
-            if (currentPosition == newPosition)
-            {
-                enemyState = EnemyState.Idle;
-                idleCounter += idleCounter;
-            }
+            //setting the new X and Y positions to newPosition
+            newPosition = new Vector2(positionX, positionY) + startPosition;
         }
+
+        //Move towards new position
+        transform.position = Vector2.MoveTowards(currentPosition, newPosition, speed * Time.deltaTime);
+
+        //NOTE: This is a fail safe to make sure the enemies do not move outside of the patrol area
+        // Clamp the X position between the radius
+        if (positionX >= radiusX || positionX <= -radiusX)
+        {
+            positionX = Mathf.Clamp(positionX, -radiusX, radiusX);
+        }
+
+        // Clamp the Y position between the radius
+        if (positionY >= radiusY || positionY <= -radiusY)
+        {
+            positionY = Mathf.Clamp(positionY, -radiusY, radiusY);
+        }
+
+        if (currentPosition == newPosition)
+        {
+            enemyState = EnemyState.Idle;
+            idleCounter += idleCounter;
+        }
+
     }
     //Function will only be called when eney state is set to attack
     void Attack()
     {
-        if (!cantmove)
+
+        // setting the player position to newPosition
+        List<GameObject> players = GameObject.FindGameObjectsWithTag("Player").ToList();
+        GameObject closestTarget;
+        float distance = Mathf.Infinity;
+
+
+        foreach (GameObject target in players)
         {
-            // setting the player position to newPosition
-            List<GameObject> players = GameObject.FindGameObjectsWithTag("Player").ToList();
-            GameObject closestTarget;
-            float distance = Mathf.Infinity;
+            //creating a random variable
+            float canThrow = Random.Range(0, 100);
 
 
-            foreach (GameObject target in players)
+            //getting the distance from the player to the AI
+            float playerDiff = target != null ? (target.transform.position - transform.position).magnitude : float.MaxValue; ;
+
+            if (playerDiff < distance)
             {
-                //creating a random variable
-                float canThrow = Random.Range(0, 100);
+                closestTarget = target;
+                distance = playerDiff;
+            }
+
+            //checking to see if isAttacking is true
+            if (isAttacking == true)
+            {
 
 
-                //getting the distance from the player to the AI
-                float playerDiff = target != null ? (target.transform.position - transform.position).magnitude : float.MaxValue; ;
-
-                if (playerDiff < distance)
+                //checking if Ai is within hit distance
+                if (playerDiff <= hitDistance)
                 {
-                    closestTarget = target;
-                    distance = playerDiff;
-                }
-
-                //checking to see if isAttacking is true
-                if (isAttacking == true)
-                {
-
-
-                    //checking if Ai is within hit distance
-                    if (playerDiff <= hitDistance && coolDownTimer <= 0)
+                    //call this function
+                    if (PlaySound == false)
                     {
-                        //call this function
-                        if (PlaySound == false)
-                        {
-                            SoundController.instance.EnemySlap();
-                            PlaySound = true;
-                        }
-                        Slap();
-
-
+                        SoundController.instance.EnemySlap();
+                        PlaySound = true;
                     }
+                    Slap();
 
-                    //move towards player
-                    transform.position = Vector2.MoveTowards(currentPosition, target.transform.position, speed * Time.deltaTime);
+
                 }
 
-                //checking to see if isAttacking is true
-                else if (isAttacking == false)
-                {
-                    Vector2 toPlayer = (target.transform.position - transform.position).normalized; toPlayer.y = 0;
-                    //Move away from the player
-                    transform.position = Vector2.MoveTowards(currentPosition, currentPosition - toPlayer, speed / 2 * Time.deltaTime);
-                    //Calling cool down function only when is attacking is false
-                    PlaySound = false;
-                    CoolDown();
-                }
+                //move towards player
+                transform.position = Vector2.MoveTowards(currentPosition, target.transform.position, speed * Time.deltaTime);
+            }
 
-                //checking to see if AI is able to throw a water balloon
-                if (canThrow >= 50 && playerDiff >= hitDistance && numWaterBalloons > 0)
-                {
-                    //spawn water balloon
-                    Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
-                    //decrease the number of water balloons being held
-                    numWaterBalloons -= 1;
-                }
+            //checking to see if isAttacking is true
+            else if (isAttacking == false)
+            {
+                Vector2 toPlayer = (target.transform.position - transform.position).normalized; toPlayer.y = 0;
+                //Move away from the player
+                transform.position = Vector2.MoveTowards(currentPosition, currentPosition - toPlayer, speed / 2 * Time.deltaTime);
+                //Calling cool down function only when is attacking is false
+                PlaySound = false;
+                CoolDown();
+            }
+
+            //checking to see if AI is able to throw a water balloon
+            if (canThrow >= 50 && playerDiff >= hitDistance && numWaterBalloons > 0)
+            {
+                //spawn water balloon
+                Instantiate(balloonPrefab, gameObject.transform.position, Quaternion.identity);
+                //decrease the number of water balloons being held
+                numWaterBalloons -= 1;
             }
         }
+
     }
 
     //Function will only be called when enemy state is set to special, use will chnage depending on the child in heriting
-   /* public virtual void Special()
-    {
+    /* public virtual void Special()
+     {
 
-    }*/
+     }*/
 
     //Function that controls when AI tries to hit the player, use will chnage depending on the child in heriting
     public void Slap()
     {
-        if (!cantmove)
-        {
-            Debug.Log("Slap");
-            isSlapping = true;
-            //EndOfSlap();
-            //reset cool down
-            coolDownTimer = coolDown;
-            animator.SetBool("throw", true);
-        }
+        Debug.Log("Slap");
+        isSlapping = true;
+        //EndOfSlap();
+        //reset cool down
+        coolDownTimer = coolDown;
+        animator.SetBool("throw", true);
+
     }
 
     public void EndOfSlap()
@@ -296,40 +282,40 @@ public class BaseEnemy : MonoBehaviour
         animator.SetTrigger("EnemHit");
     }
     //Function controls the amount of AI with vision distance of each other
-   /* void ScanForFriends()
-    {
-        // setting count to 0 everyframe so the same enemy is not counted twice
-        int count = 0;
-        //Creating a list to sort the amount of enemies seen
-        List<GameObject> enemies = GameObject.FindGameObjectsWithTag("Enemy").ToList();
+    /* void ScanForFriends()
+     {
+         // setting count to 0 everyframe so the same enemy is not counted twice
+         int count = 0;
+         //Creating a list to sort the amount of enemies seen
+         List<GameObject> enemies = GameObject.FindGameObjectsWithTag("Enemy").ToList();
 
-        //foreach stated to see how many enemies are currently in the list
-        foreach (GameObject enemy in enemies)
-        {
-            //checking if an enemy is within vision distance
-            if ((enemy.transform.position - transform.position).magnitude <= visionDistance)
-            {
-                //add 1 increment to count equal to the amount of game objects in the list
-                count++;
-            }
-        }
+         //foreach stated to see how many enemies are currently in the list
+         foreach (GameObject enemy in enemies)
+         {
+             //checking if an enemy is within vision distance
+             if ((enemy.transform.position - transform.position).magnitude <= visionDistance)
+             {
+                 //add 1 increment to count equal to the amount of game objects in the list
+                 count++;
+             }
+         }
 
-        // checking if count is higher than 3 and if AI is in correct state
-        if (count >= 2 && enemyState == EnemyState.Attack /*&& targetDistance > 2)
-        {
-            //if true change states
-            enemyState = EnemyState.Special;
-            isSpecialActive = true;
-        }
+         // checking if count is higher than 3 and if AI is in correct state
+         if (count >= 2 && enemyState == EnemyState.Attack /*&& targetDistance > 2)
+         {
+             //if true change states
+             enemyState = EnemyState.Special;
+             isSpecialActive = true;
+         }
 
-        // checking if two close to target to throw ballon
-        else if (targetDistance < 2)
-        {
-            //if true change states
-            enemyState = EnemyState.Attack;
-            isSpecialActive = false;
-        }
-    }*/
+         // checking if two close to target to throw ballon
+         else if (targetDistance < 2)
+         {
+             //if true change states
+             enemyState = EnemyState.Attack;
+             isSpecialActive = false;
+         }
+     }*/
 
     //Function will control the direction the AI is facing
     void FacingDirection()
@@ -366,8 +352,8 @@ public class BaseEnemy : MonoBehaviour
             rend.flipX = false;
         }
 
-        
-        
+
+
 
     }
 
@@ -414,11 +400,11 @@ public class BaseEnemy : MonoBehaviour
         }
 
         //checking to see if player existed
-       /* if (player == null)
-        {
-            //if not change states
-            enemyState = EnemyState.Idle;
-        }*/
+        /* if (player == null)
+         {
+             //if not change states
+             enemyState = EnemyState.Idle;
+         }*/
 
     }
 
@@ -437,8 +423,8 @@ public class BaseEnemy : MonoBehaviour
             case EnemyState.Attack:
                 Attack();
                 break;
-           case EnemyState.Special:
-              //  Special();
+            case EnemyState.Special:
+                //  Special();
                 break;
             case EnemyState.Death:
                 Death();
@@ -447,7 +433,7 @@ public class BaseEnemy : MonoBehaviour
     }
 
     //Function that controls collisions
-    public virtual void OnTriggerEnter2D (Collider2D collision)
+    public virtual void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log(collision.gameObject.name);
         //checking if isAttacking is true
@@ -456,12 +442,12 @@ public class BaseEnemy : MonoBehaviour
 
             if (isSlapping == true)
             {
-            //checking id collision was with player
-            if (collision.gameObject.tag == "Player")
-            {
-                Debug.Log("OH MY GEWD");
-                collision.gameObject.GetComponent<PlayerHealth>().currentHealth -= damage;
-                   // isAttacking = false;
+                //checking id collision was with player
+                if (collision.gameObject.tag == "Player")
+                {
+                    Debug.Log("OH MY GEWD");
+                    collision.gameObject.GetComponent<PlayerHealth>().currentHealth -= damage;
+                    isAttacking = false;
 
                     //if true, reduce the amount of health by damage
                     // playerInfo.currentHealth = playerInfo.currentHealth - damage;
