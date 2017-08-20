@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Analytics;
 
 
 public class playerInput : MonoBehaviour {
@@ -441,6 +442,7 @@ public class playerInput : MonoBehaviour {
         {
             if (PlaySound ==  false)
             {
+                
                 if (p1)
                 {
                     SoundController.instance.P1slap();
