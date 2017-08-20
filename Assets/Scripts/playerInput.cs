@@ -57,6 +57,8 @@ public class playerInput : MonoBehaviour {
     public bool firstwbani;
     public GameObject wbpopup;
     public float popuptimer;
+    public GameObject homepopup;
+    public bool homepopupset;
     // Use this for initialization
     void Start()
     {
@@ -88,7 +90,11 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
-      if (popup)
+        if (Input.GetButtonDown("A_buttonP1") && popuptimer <= 0 && homepopupset)
+        {
+            SceneManager.LoadScene("Menu");
+        }
+        if (popup)
 
         {
             popuptimer -= Time.deltaTime;
@@ -408,7 +414,8 @@ public class playerInput : MonoBehaviour {
     {
         if (other.gameObject.tag == "home")
         {
-            SceneManager.LoadScene("Menu");
+           homepopup.GetComponent<Animator>().SetBool("wbpop", true);
+            homepopupset = true;
         }
         if (other.gameObject.tag== "waterball" )
        {
