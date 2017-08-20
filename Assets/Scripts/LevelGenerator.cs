@@ -22,14 +22,15 @@ public class LevelGenerator : MonoBehaviour {
     void Start()
     {
         EnemySpawn();
+        player = GameObject.FindGameObjectWithTag("Player");
+
         if (!player.activeInHierarchy)
         {
-            player = GameObject.FindGameObjectWithTag("Player");
+            Instantiate(player, startPoint.transform.position, Quaternion.Euler(0, 0, 0));
         }
-        Instantiate(player, startPoint.transform.position, Quaternion.Euler(0, 0, 0));
 
 
-     
+
 
     }
 

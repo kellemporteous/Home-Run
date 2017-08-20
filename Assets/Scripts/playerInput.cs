@@ -90,7 +90,7 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
-        if (Input.GetButtonDown("A_buttonP1") && popuptimer <= 0 && homepopupset)
+        if ((Input.GetButtonDown("A_buttonP1") || Input.GetKeyDown(KeyCode.E)) && popuptimer <= 0 && homepopupset)
         {
             SceneManager.LoadScene("Menu");
         }
@@ -99,7 +99,7 @@ public class playerInput : MonoBehaviour {
         {
             popuptimer -= Time.deltaTime;
         }
-        if (wbpopup.GetComponent<Animator>().GetBool ("wbpop") == true && Input.GetButtonDown("A_buttonP1") && popuptimer <= 0)
+        if (wbpopup.GetComponent<Animator>().GetBool ("wbpop") == true && (Input.GetButtonDown("A_buttonP1") || Input.GetKeyDown(KeyCode.E)) && popuptimer <= 0)
         {
             firstwb = false;
             wbpopup.GetComponent<Animator>().SetBool("wbpop", false);
@@ -110,7 +110,7 @@ public class playerInput : MonoBehaviour {
         }
 
       
-            if (Input.GetButtonDown("A_buttonP1") && popuptimer <= 0)
+            if ((Input.GetButtonDown("A_buttonP1") || Input.GetKeyDown(KeyCode.E)) && popuptimer <= 0)
             {
 
                 GameObject cameramain = GameObject.FindGameObjectWithTag("popup1");
@@ -132,13 +132,13 @@ public class playerInput : MonoBehaviour {
             {
                 Application.Quit();
             }
-            if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP1") && p1)
+            if ((Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP1")) && p1)
             {
                 isslapping = true;
                 ani.SetBool("throw", true);
 
             }
-            if (Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP2") && !p1)
+            if ((Input.GetKeyDown(KeyCode.LeftAlt) || Input.GetButtonDown("A_buttonP2")) && !p1)
             {
                 isslapping = true;
                 ani.SetBool("throw", true);
@@ -159,8 +159,6 @@ public class playerInput : MonoBehaviour {
                 GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraScript>().twoplayerObj = spawncube;
                 Join.SetActive(false);
                 player2.SetActive(true);
-
-
             }
 
             string wbcountstring = WBCOUNT.ToString();
