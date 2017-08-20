@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerZset : MonoBehaviour {
     public Transform player;
 
+
 	// Use this for initialization
 	void Start ()
     {

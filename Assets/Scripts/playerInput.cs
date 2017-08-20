@@ -56,6 +56,7 @@ public class playerInput : MonoBehaviour {
     public bool firstwb;
     public bool firstwbani;
     public GameObject wbpopup;
+    public float popuptimer;
     // Use this for initialization
     void Start()
     {
@@ -87,8 +88,12 @@ public class playerInput : MonoBehaviour {
     void Update()
 
     {
-        
-        if (wbpopup.GetComponent<Animator>().GetBool ("wbpop") == true && Input.GetButtonDown("A_buttonP1"))
+      if (popup)
+
+        {
+            popuptimer -= Time.deltaTime;
+        }
+        if (wbpopup.GetComponent<Animator>().GetBool ("wbpop") == true && Input.GetButtonDown("A_buttonP1") && popuptimer <= 0)
         {
             firstwb = false;
             wbpopup.GetComponent<Animator>().SetBool("wbpop", false);
@@ -98,19 +103,20 @@ public class playerInput : MonoBehaviour {
            // wbpopup.GetComponent<Animator>().SetBool("play", true);
         }
 
-        if (popup)
-        {
-            if (Input.GetButtonDown("A_buttonP1"))
+      
+            if (Input.GetButtonDown("A_buttonP1") && popuptimer <= 0)
             {
 
                 GameObject cameramain = GameObject.FindGameObjectWithTag("popup1");
                 cameramain.GetComponent<Animator>().SetBool("play", false);
                 popup = false;
+                popuptimer = 3;
             }
-        }
+
 
         if (!popup)
         {
+
             if (!player2.activeInHierarchy)
             {
                 spawncube.transform.position = new Vector2(player.transform.position.x, player.transform.position.y);
@@ -388,8 +394,8 @@ public class playerInput : MonoBehaviour {
             }
 
 
-
-    }
+        }
+    
 
     }
     //Counts when player collects ballons, but doesn't exceed the limit set

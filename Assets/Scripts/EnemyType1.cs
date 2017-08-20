@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyType1 : BaseEnemy {
 
-
+    
    /* public override void Special()
     {
         newPosition = player.transform.position;

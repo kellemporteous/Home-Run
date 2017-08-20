@@ -8,6 +8,7 @@ public class ballonScript : MonoBehaviour {
     public string direction;
     public bool left;
     public GameObject player;
+   
 
     // Use this for initialization
     void Start()
