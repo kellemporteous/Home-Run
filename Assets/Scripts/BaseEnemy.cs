@@ -217,11 +217,6 @@ public class BaseEnemy : MonoBehaviour
                 if (playerDiff <= hitDistance)
                 {
                     //call this function
-                    if (PlaySound == false)
-                    {
-                        SoundController.instance.EnemySlap();
-                        PlaySound = true;
-                    }
                     Slap();
 
 
@@ -448,7 +443,12 @@ public class BaseEnemy : MonoBehaviour
                     Debug.Log("OH MY GEWD");
                     collision.gameObject.GetComponent<PlayerHealth>().currentHealth -= damage;
                     isAttacking = false;
-
+                    if (PlaySound == false)
+                    {
+                        SoundController.instance.EnemySlap();
+                        PlaySound = true;
+                    }
+                    Slap();
                     //if true, reduce the amount of health by damage
                     // playerInfo.currentHealth = playerInfo.currentHealth - damage;
                 }

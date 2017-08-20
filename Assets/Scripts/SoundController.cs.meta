@@ -1,10 +1,17 @@
 fileFormatVersion: 2
 guid: b08e1291f98411648856a8ee9a47cd06
-timeCreated: 1502068166
-licenseType: Pro
+timeCreated: 1503216597
+licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - P1Slap: {fileID: 8300000, guid: b46b5b8cab4859b42b0c8039f644518c, type: 3}
+  - P2Slap: {fileID: 8300000, guid: 0ffb707d1793b7d4591b649747530699, type: 3}
+  - balloonPickup: {fileID: 8300000, guid: 3bca722873aa9e74596754acbd0b2b8f, type: 3}
+  - balloonThrow: {fileID: 8300000, guid: 3bca722873aa9e74596754acbd0b2b8f, type: 3}
+  - enemySlap: {fileID: 8300000, guid: 98da1674cef5dbe4e839d15101dc97b0, type: 3}
+  - P1Jump: {fileID: 8300000, guid: 30d8fad00b6d44341becb2f30c65f93a, type: 3}
+  - P2Jump: {fileID: 8300000, guid: 30d8fad00b6d44341becb2f30c65f93a, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
