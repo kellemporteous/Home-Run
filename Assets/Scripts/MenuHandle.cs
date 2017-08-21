@@ -44,8 +44,8 @@ public class MenuHandle : MonoBehaviour {
         if (Input.GetAxis("verticalP1") == 0f)
         {
             ispressed = false;
-        }
-            if (Input.GetKeyDown(KeyCode.Space) && (Selected < buttons.Length - 1))
+        } 
+            if ((Input.GetKeyDown(KeyCode.Space) && (Selected < buttons.Length - 1) || Input.GetButtonDown("A_buttonP1") && (Selected < buttons.Length - 1)))
             {
                 SceneManager.LoadScene(SceneName[Selected]);
             }
