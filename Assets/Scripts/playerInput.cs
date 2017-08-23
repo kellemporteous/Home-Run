@@ -100,25 +100,23 @@ public class playerInput : MonoBehaviour {
         {
             popuptimer -= Time.deltaTime;
         }
-        if (wbpopup.GetComponent<Animator>().GetBool ("wbpop") == true && (Input.GetButtonDown("A_buttonP1") || Input.GetKeyDown(KeyCode.E)) && popuptimer <= 0)
-        {
-            firstwb = false;
-            wbpopup.GetComponent<Animator>().SetBool("wbpop", false);
-        }
-        if (firstwbani)
-        {
-           // wbpopup.GetComponent<Animator>().SetBool("play", true);
-        }
+
+		if (popup == false)
+		{
+			popuptimer = 5;
+		}
+
+		if (popuptimer <= 0) 
+		{
+			GameObject cameramain = GameObject.FindGameObjectWithTag("popup1");
+			cameramain.GetComponent<Animator>().SetBool("play", false);
+			wbpopup.GetComponent<Animator> ().SetBool ("wbpop", false);
+			popup = false;
+		}
+
 
       
-            if ((Input.GetButtonDown("A_buttonP1") || Input.GetKeyDown(KeyCode.E)) && popuptimer <= 0)
-            {
 
-                GameObject cameramain = GameObject.FindGameObjectWithTag("popup1");
-                cameramain.GetComponent<Animator>().SetBool("play", false);
-                popup = false;
-                popuptimer = 3;
-            }
 
 
         if (!popup)
@@ -420,11 +418,11 @@ public class playerInput : MonoBehaviour {
        {
             if (firstwb == true)
             {
-                popup = true;
                 firstwbani = true;
                 if (firstwbani)
                 {
                     wbpopup.GetComponent<Animator>().SetBool("wbpop", true);
+					firstwb = false;
                 }
                 firstwbani = false;
                    
